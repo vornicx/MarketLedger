@@ -1,5 +1,5 @@
 import { edition as rawEdition, editions as rawEditions, ideas as rawIdeas, thesisReviews as rawThesisReviews, whaleEvents } from './data.js';
-import { ui, editionTranslations, ideaTranslations, thesisTranslations } from './i18n.js';
+import { ui, editionTranslations, ideaTranslations, thesisTranslations, whaleEventTranslations } from './i18n.js';
 import { append, badge, h, link, rule, setPageMeta } from './ui.js';
 
 const app = document.querySelector('#app');
@@ -46,11 +46,15 @@ function localizeIdea(base) {
 function localizeThesis(base) {
   return { ...base, ...(thesisTranslations[lang]?.[base.id] || {}) };
 }
+function localizeWhale(base) {
+  return { ...base, ...(whaleEventTranslations[lang]?.[base.id] || {}) };
+}
 
 function editionNow() { return localizeEdition(rawEdition); }
 function editionsNow() { return rawEditions.map(localizeEdition); }
 function ideasNow() { return rawIdeas.map(localizeIdea); }
 function thesesNow() { return rawThesisReviews.map(localizeThesis); }
+function whalesNow() { return whaleEvents.map(localizeWhale); }
 
 function languageSwitch() {
   const wrap = h('div', 'language-switch');
@@ -209,7 +213,7 @@ function home() {
   const cryptoSection = h('section','split-panel'); cryptoSection.id='crypto';
   const whaleCol = h('div','split-panel__main');
   whaleCol.appendChild(h('p','section-intro',t.trackerIntro));
-  if (whaleEvents.length) whaleEvents.forEach(w => whaleCol.appendChild(whaleRow(w)));
+  if (whalesNow().length) whalesNow().forEach(w => whaleCol.appendChild(whaleRow(w)));
   else whaleCol.appendChild(h('div','whale-empty',t.noWhales));
   const explainer = h('aside','editorial-aside');
   append(explainer,h('div','aside-rule',t.classificationRule),h('h3','editorial-aside__title',t.contextConviction),h('p','',t.contextCopy),link(t.walletJournal,withLang('/whales'),'text-link'));
@@ -303,7 +307,7 @@ function scorecardPage() {
 }
 
 function whalesPage() {
-  const t=strings();setPageMeta(`Market Ledger — ${t.nav.whales}`,t.whalesDek);const frag=document.createDocumentFragment();append(frag,masthead('whales'));const main=h('main','shell page');append(main,h('div','kicker',t.whalesKicker),h('h1','page-title',t.whalesTitle),h('p','page-dek',t.whalesDek));const filters=h('div','filter-row');const chain=h('select','filter-select');[[t.allChains,''],['Solana','Solana'],['Ethereum','Ethereum'],['Base','Base']].forEach(([label,val])=>{const o=h('option','',label);o.value=val;chain.appendChild(o);});const klass=h('select','filter-select');[[t.allClassifications,''],[t.noise,'Noise'],[t.interesting,'Interesting'],[t.highConviction,'High conviction']].forEach(([label,val])=>{const o=h('option','',label);o.value=val;klass.appendChild(o);});append(filters,chain,klass);main.appendChild(filters);main.appendChild(rule(t.trackedEvents));const list=h('section','whale-list');const draw=()=>{list.replaceChildren();const filtered=whaleEvents.filter(w=>(!chain.value||w.chain===chain.value)&&(!klass.value||w.classification===klass.value));if(!filtered.length){list.appendChild(h('p','empty-state',t.noEvents));return;}filtered.forEach(w=>list.appendChild(whaleRow(w)));};chain.addEventListener('change',draw);klass.addEventListener('change',draw);draw();main.appendChild(list);main.appendChild(rule(t.method));const method=h('section','method-grid');[[t.noise,t.noiseDesc],[t.interesting,t.interestingDesc],[t.highConviction,t.highDesc]].forEach(([a,b])=>{const x=h('article','method-card');append(x,h('h3','',a),h('p','',b));method.appendChild(x);});main.appendChild(method);append(frag,main,footer());return frag;
+  const t=strings();const localizedWhales=whalesNow();setPageMeta(`Market Ledger — ${t.nav.whales}`,t.whalesDek);const frag=document.createDocumentFragment();append(frag,masthead('whales'));const main=h('main','shell page');append(main,h('div','kicker',t.whalesKicker),h('h1','page-title',t.whalesTitle),h('p','page-dek',t.whalesDek));const filters=h('div','filter-row');const chain=h('select','filter-select');[[t.allChains,''],['Solana','Solana'],['Ethereum','Ethereum'],['Base','Base']].forEach(([label,val])=>{const o=h('option','',label);o.value=val;chain.appendChild(o);});const klass=h('select','filter-select');[[t.allClassifications,''],[t.noise,'Noise'],[t.interesting,'Interesting'],[t.highConviction,'High conviction']].forEach(([label,val])=>{const o=h('option','',label);o.value=val;klass.appendChild(o);});append(filters,chain,klass);main.appendChild(filters);main.appendChild(rule(t.trackedEvents));const list=h('section','whale-list');const draw=()=>{list.replaceChildren();const filtered=localizedWhales.filter(w=>(!chain.value||w.chain===chain.value)&&(!klass.value||w.classification===klass.value));if(!filtered.length){list.appendChild(h('p','empty-state',t.noEvents));return;}filtered.forEach(w=>list.appendChild(whaleRow(w)));};chain.addEventListener('change',draw);klass.addEventListener('change',draw);draw();main.appendChild(list);main.appendChild(rule(t.method));const method=h('section','method-grid');[[t.noise,t.noiseDesc],[t.interesting,t.interestingDesc],[t.highConviction,t.highDesc]].forEach(([a,b])=>{const x=h('article','method-card');append(x,h('h3','',a),h('p','',b));method.appendChild(x);});main.appendChild(method);append(frag,main,footer());return frag;
 }
 
 function notFound(message) {
