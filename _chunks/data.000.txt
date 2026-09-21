@@ -1,0 +1,43 @@
+export const edition = {
+    date: '2026-09-21',
+    displayDate: 'Monday, 21 September 2026',
+    label: 'Morning Edition · 13:20 CEST snapshot',
+    headline: 'Oil relief reopens the risk-on trade — but the Fed still sets the ceiling',
+    dek: 'Technology and crypto are rebounding as crude retreats for a fourth session. The move is constructive, but it is still a relief rally inside a tighter-rate regime rather than a clean return to easy financial conditions.',
+    brief: [
+        'The most important change today is energy. Brent has fallen for a fourth consecutive session as more Gulf supply reaches the market and diplomatic hopes improve. Cheaper oil reduces the immediate inflation impulse, lowers pressure on bond yields and gives duration-sensitive assets room to breathe.',
+        'Risk assets are responding in the expected order: technology leads, Europe is broadly higher, US equity futures are positive and crypto has accelerated. Bitcoin traded above $82,000 in early coverage and later reached an eight-month high above $85,000, while Ether and Solana also advanced.',
+        'The constraint has not disappeared. The Federal Reserve raised rates last week to 3.75%–4.00% and retained a hawkish tone. The correct reading is therefore “risk-on relief with macro confirmation still required”, not “all clear”.'
+    ],
+    indicators: [
+        { symbol: 'STOXX', label: 'STOXX Europe 600', value: '640.55 · +0.8%', note: 'Tech-led Europe rally, 08:20 GMT Reuters snapshot', state: 'positive' },
+        { symbol: 'IBEX', label: 'IBEX 35', value: '~19,700 · +1%', note: 'Spain among stronger European markets', state: 'positive' },
+        { symbol: 'BTC', label: 'Bitcoin', value: '$82k → $85.1k', note: 'Eight-month high later in session; volatile intraday', state: 'positive' },
+        { symbol: 'ETH', label: 'Ether', value: '$2,668 · +3.5%', note: 'CoinDesk snapshot', state: 'positive' },
+        { symbol: 'SOL', label: 'Solana', value: '$111.83 · +2.9%', note: 'CoinDesk snapshot', state: 'positive' },
+        { symbol: 'BRENT', label: 'Brent crude', value: '~$101 · -2%', note: 'Fourth straight decline; inflation relief channel', state: 'negative' },
+        { symbol: 'DXY', label: 'Dollar index', value: '100.23', note: 'Still firm after Fed tightening', state: 'neutral' },
+        { symbol: 'USDJPY', label: 'USD/JPY', value: '~157', note: 'Intervention risk after BoJ hike', state: 'neutral' }
+    ],
+    stories: [
+        {
+            id: 'oil-relief', category: 'Macro', title: 'Oil is the transmission mechanism that matters most this morning',
+            dek: 'Lower crude is doing more than helping consumers: it is relaxing the inflation-and-rates chain that has been punishing long-duration assets.',
+            analysis: 'Brent is down for a fourth consecutive session, with Reuters reporting that more oil is leaving the Gulf than markets had feared. That matters because the latest tightening cycle has been reinforced by inflation risk. When energy falls, the market can price a slightly less hostile inflation path, Treasury prices improve, yields ease and technology and crypto receive immediate relief. The key distinction is cause: a fall in oil because supply normalises is generally friendlier for risk assets than a fall caused by collapsing demand.',
+            watch: 'Whether Brent can stay near or below the low-$100s area without a fresh geopolitical supply shock.'
+        },
+        {
+            id: 'fed-ceiling', category: 'Rates', title: 'The Fed remains the ceiling on enthusiasm',
+            dek: 'Last week’s 25 bp hike to 3.75%–4.00% was the first increase in three years and the message remained hawkish.',
+            analysis: 'The relief rally is occurring after a material tightening step, not after a pivot. Sixteen of eighteen Fed policymakers projected at least one more increase during 2026. That leaves rate-sensitive assets vulnerable if inflation data, wages or energy re-accelerate. Lower oil buys the market breathing room, but the bar for durable multiple expansion remains high while real yields and the dollar are elevated.',
+            watch: 'US 2-year and 10-year yields, real yields, October hike expectations and any change in Fed language after incoming inflation data.'
+        },
+        {
+            id: 'equities-tech', category: 'Markets', title: 'Technology is leading the rebound across regions',
+            dek: 'Europe’s tech sector gained around 2%, while US futures pointed higher and AI-linked names led pre-market strength.',
+            analysis: 'This is the cross-asset confirmation we wanted to see from an energy-relief move. The STOXX 600 rose about 0.8%, European technology led, travel benefited from lower fuel prices and energy stocks lagged. In the US, Reuters reported S&P 500 futures up around 0.6% and Nasdaq futures close to 1%, with Intel, Marvell, Meta and Dell among notable pre-market gainers. The breadth is better than a single-name squeeze, but the rally still needs cash-session follow-through.',
+            watch: 'Whether US cash trading confirms futures, whether market breadth improves beyond AI/semis, and whether yields stay cooperative.'
+        },
+        {
+            id: 'europe-asia', category: 'Markets', title: 'Europe and Asia are confirming a broader risk bid',
+            dek: 'The move is not isolated to Wall Street: Korea, Taiwan, China and Europe are participating.',
