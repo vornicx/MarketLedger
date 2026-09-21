@@ -146,7 +146,7 @@ function marketLogo(symbol) {
 
 function marketPulse(current = editionNow()) {
   const t=strings();
-  const priority=['STOXX','IBEX','BTC','ETH','SOL','BRENT'];
+  const priority=['BTC','ETH','SOL','BRENT'];
   const items=priority.map(symbol=>current.indicators.find(i=>i.symbol===symbol)).filter(Boolean);
   const section=h('section','premium-section market-pulse');
   section.id='market-pulse';
@@ -333,6 +333,37 @@ function mediaFigure(meta,className) {
   return figure;
 }
 
+function marketTape(current = editionNow()) {
+  const symbols=['STOXX','IBEX','BTC','ETH','SOL','BRENT','DXY'];
+  const tape=h('section','market-tape');
+  tape.setAttribute('aria-label',lang==='es'?'Resumen de mercados':'Market summary');
+  const label=h('div','market-tape__label',lang==='es'?'Mercados':'Markets');
+  tape.appendChild(label);
+  const track=h('div','market-tape__track');
+  symbols.map(symbol=>current.indicators.find(x=>x.symbol===symbol)).filter(Boolean).forEach(item=>{
+    const parsed=splitMarketValue(item.value,item.note);
+    const cell=h('div',`market-tape__item market-tape__item--${item.state||'neutral'}`);
+    append(cell,h('strong','market-tape__symbol',item.symbol),h('span','market-tape__price',parsed.price),h('span','market-tape__change',parsed.change||'—'));
+    track.appendChild(cell);
+  });
+  tape.appendChild(track);
+  return tape;
+}
+
+function latestStrip(current = editionNow()) {
+  const section=h('section','latest-strip');
+  const head=h('div','latest-strip__label',lang==='es'?'Último':'Latest');
+  section.appendChild(head);
+  const track=h('div','latest-strip__track');
+  current.stories.slice(0,5).forEach(story=>{
+    const a=link('',withLang(`/edition/${current.date}#${story.id}`),'latest-strip__item');
+    append(a,h('span','latest-strip__category',story.category),h('strong','latest-strip__title',story.title));
+    track.appendChild(a);
+  });
+  section.appendChild(track);
+  return section;
+}
+
 function home() {
   const t=strings();
   const current=editionNow();
@@ -342,6 +373,7 @@ function home() {
   append(frag,masthead('today'));
 
   const main=h('main','shell social-home');
+  main.appendChild(marketTape(current));
 
   // Edition intro: compact, readable and obvious.
   const intro=h('section','edition-intro');
@@ -362,6 +394,7 @@ function home() {
   // Lead image behaves like a social/editorial media card.
   const leadMedia=mediaFigure(storyMedia('hero'),'lead-media');
   main.appendChild(leadMedia);
+  main.appendChild(latestStrip(current));
 
   // Market cards: clear, horizontally scannable.
   main.appendChild(marketPulse(current));
@@ -407,6 +440,7 @@ function home() {
       body,
       meta,
       h('h3','feed-story__title',story.title),
+      h('div','feed-story__why-label',t.whyMatters),
       h('p','feed-story__dek',story.dek),
       h('div','feed-story__watch'),
       h('span','feed-story__read',t.readStory)
@@ -452,6 +486,26 @@ function home() {
     watchList.appendChild(row);
   });
   rail.appendChild(watch);
+
+  const score=h('section','rail-card rail-score');
+  const scoreHead=h('div','rail-card__head');
+  append(scoreHead,h('h2','rail-card__title',lang==='es'?'Track record':'Track record'),link((lang==='es'?'Abrir scorecard':'Open scorecard')+' →',withLang('/scorecard'),'rail-card__link'));
+  score.appendChild(scoreHead);
+  const theses=thesesNow();
+  const openCount=theses.filter(x=>String(x.outcome).toLowerCase()==='open'||String(x.outcome).toLowerCase()==='abierta').length;
+  const resolvedCount=theses.length-openCount;
+  const stats=h('div','rail-score__stats');
+  const total=h('div','rail-score__stat');
+  append(total,h('strong','',String(theses.length)),h('span','',lang==='es'?'Tesis registradas':'Recorded theses'));
+  const open=h('div','rail-score__stat');
+  append(open,h('strong','',String(openCount)),h('span','',lang==='es'?'Abiertas':'Open'));
+  const resolved=h('div','rail-score__stat');
+  append(resolved,h('strong','',String(resolvedCount)),h('span','',lang==='es'?'Resueltas':'Resolved'));
+  append(stats,total,open,resolved);
+  score.appendChild(stats);
+  const scoreCopy=h('p','rail-score__copy',lang==='es'?'Las tesis se congelan al publicarse y se revisan contra lo que ocurrió después.':'Theses are frozen at publication and reviewed against what happened next.');
+  score.appendChild(scoreCopy);
+  rail.appendChild(score);
 
   const whale=h('section','rail-card');
   const whaleHead=h('div','rail-card__head');
