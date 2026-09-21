@@ -308,12 +308,13 @@ function storyMedia(id) {
 
 function mediaFigure(meta,className) {
   const figure=h('figure',className);
-  const img=h('img',className+'__img');
+  const isHero=className.includes('premium-hero__visual');
+  const img=h('img',isHero?'premium-hero__visual__img':'premium-story__visual__img');
   img.src=meta.src;
   img.alt=meta.alt;
-  img.loading=className.includes('hero')?'eager':'lazy';
+  img.loading=isHero?'eager':'lazy';
   img.decoding='async';
-  const cap=link(meta.credit,meta.href,className+'__credit');
+  const cap=link(meta.credit,meta.href,isHero?'premium-hero__visual__credit':'premium-story__visual__credit');
   cap.target='_blank';
   cap.rel='noreferrer';
   append(figure,img,cap);
