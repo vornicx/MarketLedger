@@ -69,3 +69,33 @@ For every new date translate:
 - source notes while preserving original source names and URLs
 
 The website language switch must always render an edition entirely in one language; avoid mixed English/Spanish prose except proper names, tickers and standard market abbreviations.
+
+
+## Front-page data contract
+
+To preserve the site's intuitive hierarchy, every new edition must satisfy these UI-oriented rules:
+
+### Brief ordering
+The first three items of `brief` must always follow this semantic order:
+1. **What changed** — the most important new development since the prior edition.
+2. **How markets reacted** — the clearest cross-asset response.
+3. **What could change the picture** — the main invalidation/risk to the current regime.
+
+Additional brief items may follow in the full edition, but the first three power the homepage 60-second read.
+
+### Market Pulse
+The `indicators` array must always include, using these exact symbols when data is available:
+- `BTC`
+- `BRENT`
+- `STOXX`
+- `DXY`
+
+These four power the homepage Market Pulse. Other indicators remain useful for the full edition snapshot.
+
+### Story structure
+Every story must have:
+- a concise `dek` that can stand alone as **Why it matters**;
+- an `analysis` field explaining **What it means**;
+- a concrete `watch` field explaining **What to watch next**.
+
+Avoid putting essential interpretation only in the title.
