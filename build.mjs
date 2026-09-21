@@ -22,7 +22,7 @@ await mkdir(join(out, "dist"), { recursive: true });
 await cp(join(root, "index.html"), join(out, "index.html"));
 await cp(join(root, "public"), join(out, "public"), { recursive: true });
 await concat("app", join(out, "dist", "app.js"));
-await concat("data", join(out, "dist", "data.js"));
+await cp(join(root, "data", "latest.js"), join(out, "dist", "data.js"));
 await concat("ui", join(out, "dist", "ui.js"));
 await concat("styles", join(out, "styles.css"));
 
