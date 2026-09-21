@@ -1,0 +1,96 @@
+import { edition, editions, ideas, thesisReviews, whaleEvents } from './data.js';
+import { append, badge, h, link, rule, setPageMeta } from './ui.js';
+const app = document.querySelector('#app');
+if (!app)
+    throw new Error('Missing #app root');
+function masthead(active = 'Today') {
+    const header = h('header', 'masthead');
+    const utility = h('div', 'masthead__utility shell');
+    append(utility, h('div', 'eyebrow', edition.displayDate), h('div', 'masthead__edition', `${edition.label} · Personal market journal`));
+    const nameRow = h('div', 'masthead__name-row shell');
+    const brand = link('', '/', 'masthead__brand');
+    const mark = h('span', 'brand-mark', 'ML');
+    const wordmark = h('span', 'brand-wordmark', 'MARKET LEDGER');
+    append(brand, mark, wordmark);
+    append(nameRow, brand, h('div', 'masthead__tagline', 'Intelligence, without the noise.'));
+    const nav = h('nav', 'topnav');
+    nav.setAttribute('aria-label', 'Primary navigation');
+    const inner = h('div', 'shell topnav__inner');
+    const items = [
+        ['Today', '/'], ['Markets', '/#markets'], ['Crypto', '/#crypto'], ['Macro', '/#macro'], ['Whales', '/whales'], ['Ideas', '/ideas'], ['Scorecard', '/scorecard'], ['Archive', '/archive']
+    ];
+    items.forEach(([name, href]) => {
+        const a = link(name, href, `topnav__link${active === name ? ' is-active' : ''}`);
+        inner.appendChild(a);
+    });
+    nav.appendChild(inner);
+    append(header, utility, nameRow, nav);
+    return header;
+}
+function footer() {
+    const f = h('footer', 'footer');
+    const inner = h('div', 'shell footer__grid');
+    append(inner, h('div', 'footer__brand', 'ML / MARKET LEDGER'), h('p', 'footer__copy', 'A private market research journal. Analysis is informational and scenario-based; it is not personalised financial advice.'), h('p', 'footer__copy', 'Independent daily market intelligence · Madrid / Europe'));
+    f.appendChild(inner);
+    return f;
+}
+function ticker() {
+    const wrap = h('div', 'ticker');
+    const inner = h('div', 'shell ticker__inner');
+    edition.indicators.forEach((item) => {
+        const cell = h('div', 'ticker__item');
+        append(cell, h('div', 'ticker__symbol', item.symbol), h('div', 'ticker__value', item.value), h('div', 'ticker__note', item.note));
+        inner.appendChild(cell);
+    });
+    wrap.appendChild(inner);
+    return wrap;
+}
+function storyCard(story, compact = false) {
+    const article = h('article', compact ? 'story story--compact' : 'story');
+    append(article, h('div', 'story__kicker', story.category), h('h3', 'story__title', story.title), h('p', 'story__dek', story.dek));
+    if (!compact) {
+        append(article, h('p', 'story__body', story.analysis), h('p', 'story__watch', `Watch: ${story.watch}`));
+    }
+    return article;
+}
+function scenarioCard(s) {
+    const card = h('article', `scenario scenario--${s.tone}`);
+    append(card, h('div', 'scenario__meta', s.tone === 'constructive' ? 'Scenario A' : s.tone === 'neutral' ? 'Scenario B' : 'Scenario C'), h('h3', 'scenario__title', s.name), h('p', 'scenario__thesis', s.thesis));
+    const conditions = h('div', 'scenario__block');
+    conditions.appendChild(h('div', 'scenario__label', 'Confirmation conditions'));
+    const ul = h('ul', 'clean-list');
+    s.conditions.forEach(x => ul.appendChild(h('li', '', x)));
+    conditions.appendChild(ul);
+    const watch = h('div', 'scenario__block');
+    watch.appendChild(h('div', 'scenario__label', 'Watch next'));
+    const ul2 = h('ul', 'clean-list');
+    s.watch.forEach(x => ul2.appendChild(h('li', '', x)));
+    watch.appendChild(ul2);
+    append(card, conditions, watch);
+    return card;
+}
+function whaleRow(event) {
+    const row = h('article', 'whale-row');
+    append(row, h('time', 'whale-row__time', event.time), h('div', 'whale-row__main'));
+    const main = row.querySelector('.whale-row__main');
+    const top = h('div', 'whale-row__top');
+    append(top, h('strong', '', `${event.wallet} · ${event.chain}`), badge(event.classification, event.classification === 'High conviction' ? 'accent' : 'muted'));
+    append(main, top, h('div', 'whale-row__action', `${event.action} ${event.token} · ${event.approxValue}`), h('div', 'whale-row__note', event.note), h('code', 'whale-row__address', event.address));
+    return row;
+}
+function home() {
+    setPageMeta('Market Ledger — Daily Brief', 'A premium personal daily market newspaper, research archive and thesis journal.');
+    const frag = document.createDocumentFragment();
+    append(frag, masthead('Today'), ticker());
+    const main = h('main', 'shell');
+    const lead = h('section', 'lead');
+    const leadCopy = h('div', 'lead__copy');
+    append(leadCopy, h('div', 'kicker', 'THE DAILY BRIEF'), h('h1', 'lead__headline', edition.headline), h('p', 'lead__dek', edition.dek), h('div', 'lead__meta', `${edition.label} · 12 min read · ${edition.displayDate}`));
+    const leadAside = h('aside', 'lead__aside');
+    append(leadAside, h('div', 'aside-rule', 'TODAY IN ONE LINE'), h('p', 'lead__aside-quote', 'Risk-on relief is real today. The question is whether lower oil can keep yields contained long enough for the move to broaden.'), link('Read the full edition →', `/edition/${edition.date}`, 'text-link'));
+    append(lead, leadCopy, leadAside);
+    main.appendChild(lead);
+    main.appendChild(rule('Editorial note'));
+    const note = h('section', 'brief-grid');
+    edition.brief.forEach((p, i) => {
+        const block = h('div', 'brief-paragraph');
