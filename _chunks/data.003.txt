@@ -1,0 +1,10 @@
+        bearCase: 'Capex normalises faster than expected, export restrictions tighten or customer concentration produces a prolonged order gap.',
+        catalysts: ['Foundry capex updates', 'High-NA EUV adoption', 'Order intake', 'AI infrastructure demand'],
+        risks: ['Export controls', 'Customer concentration', 'Semiconductor capex cyclicality', 'Valuation compression'],
+        changeMind: ['Sustained deterioration in leading-edge demand', 'Evidence that AI capex does not translate into equipment demand', 'Structural margin deterioration']
+    }
+];
+export const thesisReviews = [
+    { id: 't1', date: '2026-09-21', category: 'Crypto', thesis: 'BTC can hold the former $80k resistance zone after today’s short-squeeze acceleration.', horizon: '7 days', outcome: 'Open', evidence: 'Initial edition thesis. Review after the squeeze impulse and ETF-flow follow-through can be observed.' },
+    { id: 't2', date: '2026-09-21', category: 'Macro', thesis: 'If Brent remains near the low-$100s and yields stay contained, technology and crypto should retain part of today’s relief bid.', horizon: '5 days', outcome: 'Open', evidence: 'Initial cross-asset thesis based on the oil → inflation → yields → duration transmission chain.' }
+];
