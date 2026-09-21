@@ -1,0 +1,37 @@
+export function h(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className)
+        node.className = className;
+    if (text !== undefined)
+        node.textContent = text;
+    return node;
+}
+export function append(parent, ...children) {
+    for (const child of children)
+        if (child)
+            parent.appendChild(child);
+}
+export function link(label, href, className = '') {
+    const a = h('a', className, label);
+    a.href = href;
+    return a;
+}
+export function rule(label) {
+    const wrap = h('div', 'section-rule');
+    if (label)
+        append(wrap, h('span', 'section-rule__label', label));
+    return wrap;
+}
+export function badge(text, tone = 'muted') {
+    return h('span', `badge badge--${tone}`, text);
+}
+export function setPageMeta(title, description) {
+    document.title = title;
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) {
+        meta = document.createElement('meta');
+        meta.name = 'description';
+        document.head.appendChild(meta);
+    }
+    meta.content = description;
+}
