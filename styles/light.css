@@ -257,3 +257,594 @@ body{background:var(--paper);line-height:1.62}
   .ideas-grid--front{gap:24px}
   .closing-note--front{margin-top:46px}
 }
+
+
+/* =========================================================
+   UX clarity pass — 2026-09-21
+   Goal: understand the page before reading the page.
+   ========================================================= */
+
+:root{
+  --paper:#f8f3ec;
+  --paper-soft:#f1e9df;
+  --paper-card:#fbf8f3;
+  --ink:#1e1b18;
+  --muted:#716960;
+  --faint:#948a80;
+  --rule:#d9cec1;
+  --accent:#8b312e;
+  --positive:#2f6650;
+  --negative:#9b4842;
+  --shell:min(1120px,calc(100vw - 48px));
+  --reading:760px;
+}
+
+body{font-size:16px;line-height:1.6;background:var(--paper)}
+.shell{width:var(--shell)}
+.kicker,.story__kicker,.aside-rule,.scenario__meta{
+  font-size:10px;
+  letter-spacing:.1em;
+  color:var(--muted);
+}
+
+/* Header: fewer choices, clearer hierarchy */
+.masthead{border-top:0}
+.masthead__utility{
+  min-height:38px;
+  border-bottom:1px solid var(--rule);
+  color:var(--muted);
+}
+.masthead__name-row{
+  padding:20px 0 17px;
+  border-bottom:0;
+}
+.brand-mark{width:42px;height:42px}
+.brand-wordmark{font-size:clamp(32px,4.5vw,52px)}
+.masthead__tagline{font-size:13px}
+.topnav{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:rgba(248,243,236,.96);
+  border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+  backdrop-filter:blur(12px);
+}
+.topnav__inner{gap:28px}
+.topnav__link{
+  padding:11px 0 10px;
+  font-size:11px;
+  letter-spacing:.04em;
+  text-transform:none;
+  font-weight:700;
+}
+.topnav__link.is-active{color:var(--ink);border-bottom-color:var(--accent)}
+.language-switch{background:transparent}
+.language-switch__button{font-size:10px}
+
+/* Primary CTA */
+.primary-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:42px;
+  margin-top:22px;
+  padding:0 16px;
+  border:1px solid var(--ink);
+  border-radius:3px;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.02em;
+  transition:background .16s ease,color .16s ease;
+}
+.primary-link:hover{background:var(--ink);color:var(--paper)}
+
+/* Hero: headline + one-line interpretation */
+.lead--simple{
+  grid-template-columns:minmax(0,1.55fr) minmax(280px,.65fr);
+  gap:58px;
+  padding:62px 0 38px;
+  border-bottom:0;
+}
+.lead--simple .lead__headline{
+  max-width:780px;
+  font-size:clamp(46px,5.8vw,70px);
+  line-height:.98;
+  margin:10px 0 18px;
+}
+.lead--simple .lead__dek{
+  max-width:730px;
+  font-size:21px;
+  line-height:1.42;
+}
+.lead-summary{
+  align-self:center;
+  padding:22px 0 22px 24px;
+  border-left:2px solid var(--accent);
+}
+.lead-summary__label{
+  margin-bottom:8px;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  color:var(--accent);
+}
+.lead-summary__text{
+  margin:0;
+  font-family:var(--serif);
+  font-size:20px;
+  line-height:1.42;
+}
+
+/* In-page navigation: makes long pages navigable */
+.jump-nav{
+  position:relative;
+  margin:8px 0 48px;
+  border:1px solid var(--rule);
+  border-radius:4px;
+  background:rgba(255,255,255,.24);
+}
+.jump-nav__inner{
+  display:flex;
+  align-items:center;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.jump-nav__inner::-webkit-scrollbar{display:none}
+.jump-nav__link{
+  flex:0 0 auto;
+  padding:11px 15px;
+  border-right:1px solid var(--rule);
+  font-size:11px;
+  font-weight:750;
+  color:var(--muted);
+  white-space:nowrap;
+}
+.jump-nav__link:last-child{border-right:0}
+.jump-nav__link:hover{background:var(--paper-soft);color:var(--ink)}
+
+/* Shared section heading: one predictable pattern everywhere */
+.section-heading{
+  max-width:980px;
+  margin:70px auto 24px;
+  padding-top:14px;
+  border-top:1px solid var(--ink);
+  scroll-margin-top:80px;
+}
+.section-heading__title{
+  margin:5px 0 0;
+  font-family:var(--serif);
+  font-size:32px;
+  line-height:1.08;
+  letter-spacing:-.02em;
+}
+
+/* 60-second read: explicit meaning, not generic paragraphs */
+.quick-read{
+  max-width:960px;
+  margin:0 auto 62px;
+  scroll-margin-top:80px;
+}
+.quick-read__title{margin-bottom:12px}
+.quick-read__grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--ink);
+}
+.quick-read__item{
+  min-width:0;
+  padding:20px 22px 22px 0;
+}
+.quick-read__item + .quick-read__item{
+  padding-left:22px;
+  border-left:1px solid var(--rule);
+}
+.quick-read__index{
+  font-family:var(--serif);
+  font-size:16px;
+  color:var(--accent);
+}
+.quick-read__label{
+  margin:5px 0 8px;
+  font-size:13px;
+  line-height:1.25;
+  font-weight:800;
+}
+.quick-read__text{
+  margin:0;
+  font-size:14px;
+  line-height:1.58;
+  color:#49423b;
+}
+
+/* Market pulse: only four important variables */
+.market-pulse{
+  max-width:960px;
+  margin:0 auto 62px;
+  padding:22px;
+  border:1px solid var(--rule);
+  border-radius:4px;
+  background:var(--paper-card);
+  scroll-margin-top:80px;
+}
+.market-pulse__head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:24px;
+  margin-bottom:18px;
+}
+.market-pulse__hint{
+  margin:4px 0 0;
+  font-size:13px;
+  color:var(--muted);
+}
+.market-pulse__grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+  border-top:1px solid var(--rule);
+}
+.market-pulse__item{
+  padding:16px 18px 5px 0;
+}
+.market-pulse__item + .market-pulse__item{
+  padding-left:18px;
+  border-left:1px solid var(--rule);
+}
+.market-pulse__top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+.market-pulse__symbol{
+  font-size:10px;
+  font-weight:850;
+  letter-spacing:.08em;
+}
+.market-pulse__dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--faint);
+}
+.market-pulse__item--positive .market-pulse__dot{background:var(--positive)}
+.market-pulse__item--negative .market-pulse__dot{background:var(--negative)}
+.market-pulse__value{
+  margin-top:8px;
+  font-family:var(--serif);
+  font-size:22px;
+  line-height:1.1;
+}
+.market-pulse__label{
+  margin-top:4px;
+  font-size:11px;
+  color:var(--muted);
+}
+
+/* Three core stories: obvious why/watch structure */
+.key-stories{
+  display:grid;
+  grid-template-columns:1.25fr 1fr 1fr;
+  gap:22px;
+  max-width:1000px;
+  margin:0 auto;
+}
+.key-story{
+  padding:22px;
+  border:1px solid var(--rule);
+  border-radius:4px;
+  background:rgba(255,255,255,.18);
+}
+.key-story--primary{
+  background:var(--paper-card);
+  border-top:3px solid var(--ink);
+}
+.key-story__title{
+  margin:8px 0 16px;
+  font-family:var(--serif);
+  font-size:27px;
+  line-height:1.08;
+  letter-spacing:-.02em;
+}
+.key-story--primary .key-story__title{font-size:32px}
+.key-story__why,.key-story__watch{
+  padding-top:12px;
+  border-top:1px solid var(--rule);
+}
+.key-story__watch{margin-top:12px}
+.key-story__label{
+  display:block;
+  margin-bottom:5px;
+  font-size:9px;
+  font-weight:850;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--accent);
+}
+.key-story__why p,.key-story__watch p{
+  margin:0;
+  font-size:13.5px;
+  line-height:1.55;
+  color:#4a433c;
+}
+.key-story .text-link{margin-top:16px}
+
+/* Secondary story index */
+.more-section{max-width:960px;margin:44px auto 0}
+.more-section__head{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:20px;
+  margin-bottom:8px;
+}
+.more-section__title{
+  margin:0;
+  font-family:var(--serif);
+  font-size:23px;
+}
+.more-today{border-top:1px solid var(--rule)}
+.more-today__item{
+  grid-template-columns:90px minmax(0,1.1fr) 1fr 20px;
+  padding:15px 0;
+}
+.more-today__title{font-size:18px}
+.more-today__dek{font-size:12.5px}
+
+/* Scenarios: interpretive map, not another article wall */
+.scenario-grid--front{
+  max-width:960px;
+  gap:14px;
+}
+.scenario--compact{
+  padding:18px;
+  border:1px solid var(--rule)!important;
+  border-radius:4px;
+  background:rgba(255,255,255,.14);
+}
+.scenario--constructive{border-top:3px solid var(--positive)!important}
+.scenario--neutral{border-top:3px solid var(--rule-dark)!important}
+.scenario--defensive{border-top:3px solid var(--negative)!important}
+.scenario--compact .scenario__title{font-size:22px}
+.scenario--compact .scenario__thesis{font-size:14px}
+.scenario--compact .scenario__label{margin-top:12px}
+.scenario--compact .clean-list{padding-left:16px}
+
+/* Watchlist behaves like a table with headers */
+.watchlist--front{max-width:960px}
+.watchlist__header{
+  display:grid;
+  grid-template-columns:110px 1fr 170px;
+  gap:18px;
+  padding:0 0 8px;
+  border-bottom:1px solid var(--ink);
+  font-size:9px;
+  font-weight:850;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.watchlist__row{
+  grid-template-columns:110px 1fr 170px;
+  gap:18px;
+  padding:14px 0;
+}
+.watchlist__asset{font-size:18px}
+.watchlist__reason{font-size:13.5px;line-height:1.45}
+.watchlist__status{
+  display:inline-flex;
+  justify-self:end;
+  align-items:center;
+  min-height:26px;
+  padding:3px 8px;
+  border:1px solid var(--rule);
+  border-radius:999px;
+  font-size:9px;
+  text-align:center;
+}
+
+/* Lower-priority modules become two calm choices */
+.home-lower{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+  max-width:960px;
+  margin:68px auto 0;
+}
+.home-lower__block{
+  padding:22px 0;
+  border-top:1px solid var(--ink);
+}
+.home-lower__title{
+  margin:7px 0 8px;
+  font-family:var(--serif);
+  font-size:25px;
+  line-height:1.1;
+}
+.home-lower__text{
+  margin:0 0 14px;
+  max-width:470px;
+  font-size:13.5px;
+  line-height:1.55;
+  color:var(--muted);
+}
+
+/* Full edition: explicit meaning hierarchy */
+.edition-head{margin-bottom:10px}
+.edition-page .jump-nav{max-width:760px;margin-left:0}
+.edition-page .quick-read{margin-top:44px}
+.edition-stories{max-width:780px}
+.edition-stories .story{
+  padding:34px 0;
+  border-bottom:1px solid var(--rule);
+}
+.story__title{
+  margin:7px 0 18px;
+  font-size:34px;
+}
+.story__explain{
+  margin-top:17px;
+  max-width:730px;
+}
+.story__explain-label{
+  margin-bottom:5px;
+  font-size:9px;
+  font-weight:850;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.story__explain--why{
+  padding:14px 16px;
+  background:var(--paper-soft);
+  border-radius:3px;
+}
+.story__explain--watch{
+  padding-left:14px;
+  border-left:2px solid var(--accent);
+}
+.story__explain--watch .story__explain-label{color:var(--accent)}
+.story__dek,.story__body,.story__watch{
+  margin:0;
+  font-family:var(--sans);
+  font-style:normal;
+  font-size:14.5px;
+  line-height:1.65;
+}
+.story__dek{color:#3f3934}
+.story__body{color:#49423c}
+.story__watch{font-weight:600;color:#3c3631}
+
+.snapshot-grid{
+  max-width:960px;
+  grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--rule);
+  border-radius:4px;
+  overflow:hidden;
+}
+.snapshot-cell{
+  min-width:0;
+  border:0;
+  border-right:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+  background:rgba(255,255,255,.14);
+}
+.snapshot-cell:nth-child(4n){border-right:0}
+.snapshot-cell__symbol{color:var(--muted)}
+.snapshot-cell__label{font-size:14px}
+.snapshot-cell__value{font-size:19px}
+.snapshot-cell__note{font-size:10px;line-height:1.35}
+
+/* Sources easier to scan */
+.sources__row{
+  grid-template-columns:32px 180px 1fr;
+  gap:14px;
+  padding:13px 0;
+}
+.sources__label{font-size:12px}
+.sources__note{font-size:12px;line-height:1.45}
+
+/* Mobile: one decision at a time */
+@media(max-width:900px){
+  .lead--simple{grid-template-columns:1fr;gap:28px}
+  .lead-summary{max-width:620px}
+  .quick-read__grid{grid-template-columns:1fr}
+  .quick-read__item{padding:16px 0}
+  .quick-read__item + .quick-read__item{
+    padding-left:0;
+    border-left:0;
+    border-top:1px solid var(--rule);
+  }
+  .market-pulse__grid{grid-template-columns:1fr 1fr}
+  .market-pulse__item:nth-child(3){border-left:0}
+  .key-stories{grid-template-columns:1fr 1fr}
+  .key-story--primary{grid-column:1 / -1}
+  .scenario-grid--front{grid-template-columns:1fr}
+  .home-lower{grid-template-columns:1fr}
+}
+
+@media(max-width:620px){
+  :root{--shell:min(100% - 28px,1120px)}
+  .masthead__name-row{padding:13px 0 11px}
+  .brand-wordmark{font-size:27px}
+  .brand-mark{width:32px;height:32px}
+  .topnav__inner{gap:0}
+  .topnav__link{
+    padding:10px 15px 9px 0;
+    margin-right:14px;
+    font-size:10px;
+  }
+
+  .lead--simple{padding:34px 0 22px}
+  .lead--simple .lead__headline{font-size:40px;line-height:.98}
+  .lead--simple .lead__dek{font-size:18px;line-height:1.4}
+  .lead-summary{
+    padding:15px 0 15px 16px;
+  }
+  .lead-summary__text{font-size:18px}
+
+  .jump-nav{margin:12px 0 38px}
+  .jump-nav__link{padding:10px 12px;font-size:10px}
+
+  .quick-read{margin-bottom:44px}
+  .quick-read__label{font-size:12px}
+  .quick-read__text{font-size:14px}
+
+  .market-pulse{
+    margin-bottom:46px;
+    padding:17px;
+  }
+  .market-pulse__head{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:8px;
+  }
+  .market-pulse__grid{grid-template-columns:1fr 1fr}
+  .market-pulse__item{padding:13px 10px 12px 0}
+  .market-pulse__item + .market-pulse__item{padding-left:10px}
+  .market-pulse__value{font-size:19px}
+
+  .section-heading{margin:48px auto 18px}
+  .section-heading__title{font-size:27px}
+
+  .key-stories{grid-template-columns:1fr;gap:12px}
+  .key-story{padding:18px}
+  .key-story--primary{grid-column:auto}
+  .key-story__title,.key-story--primary .key-story__title{font-size:26px}
+
+  .more-section{margin-top:34px}
+  .more-section__head{align-items:flex-start}
+  .more-section__title{font-size:21px}
+  .more-today__item{
+    grid-template-columns:1fr 18px;
+    padding:14px 0;
+  }
+  .more-today__category,.more-today__title,.more-today__dek{grid-column:1}
+  .more-today__arrow{grid-column:2;grid-row:1 / span 3}
+
+  .scenario--compact{padding:17px!important}
+  .watchlist__header{display:none}
+  .watchlist__row{
+    grid-template-columns:72px 1fr;
+    gap:6px 12px;
+    padding:13px 0;
+  }
+  .watchlist__status{
+    grid-column:2;
+    justify-self:start;
+    margin-top:3px;
+  }
+
+  .home-lower{margin-top:48px;gap:12px}
+  .home-lower__title{font-size:23px}
+
+  .edition-page .jump-nav{margin-bottom:34px}
+  .snapshot-grid{grid-template-columns:1fr 1fr}
+  .snapshot-cell:nth-child(4n){border-right:1px solid var(--rule)}
+  .snapshot-cell:nth-child(2n){border-right:0}
+  .story__title{font-size:29px}
+  .story__explain--why{padding:12px}
+  .sources__row{grid-template-columns:28px 1fr}
+  .sources__note{grid-column:2}
+}
