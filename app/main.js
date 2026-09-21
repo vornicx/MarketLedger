@@ -72,30 +72,35 @@ function languageSwitch() {
 function masthead(active = 'today') {
   const t = strings();
   const current = editionNow();
-  const header = h('header', 'masthead');
-  const utility = h('div', 'masthead__utility shell');
-  append(utility, h('div', 'eyebrow', current.displayDate), languageSwitch());
+  const header = h('header','brand-header');
+  const bar = h('div','shell brand-header__bar');
 
-  const nameRow = h('div', 'masthead__name-row shell');
-  const brand = link('', withLang('/'), 'masthead__brand');
-  append(brand, h('span', 'brand-mark', 'ML'), h('span', 'brand-wordmark', 'MARKET LEDGER'));
-  const meta = h('div', 'masthead__right');
-  append(meta, h('div', 'masthead__tagline', t.tagline), h('div', 'masthead__edition', `${current.label} · ${t.personalJournal}`));
-  append(nameRow, brand, meta);
+  const brand = link('',withLang('/'),'brand-lockup');
+  append(
+    brand,
+    h('span','brand-monogram','ML'),
+    h('span','brand-divider',''),
+    h('span','brand-copy')
+  );
+  const copy = brand.querySelector('.brand-copy');
+  append(copy,h('strong','brand-name','MARKET LEDGER'),h('span','brand-strap',t.brandStrap));
 
-  const nav = h('nav', 'topnav');
-  nav.setAttribute('aria-label', lang === 'es' ? 'Navegación principal' : 'Primary navigation');
-  const inner = h('div', 'shell topnav__inner');
-  const items = [
-    ['today', t.nav.today, '/'],
-    ['ideas', t.nav.ideas, '/ideas'],
-    ['whales', t.nav.whales, '/whales'],
-    ['scorecard', t.nav.scorecard, '/scorecard'],
-    ['archive', t.nav.archive, '/archive'],
+  const nav = h('nav','brand-nav');
+  nav.setAttribute('aria-label',lang==='es'?'Navegación principal':'Primary navigation');
+  const items=[
+    ['today',t.nav.today,'/'],
+    ['ideas',t.nav.ideas,'/ideas'],
+    ['whales',t.nav.whales,'/whales'],
+    ['scorecard',t.nav.scorecard,'/scorecard'],
+    ['archive',t.nav.archive,'/archive'],
   ];
-  items.forEach(([key,label,href]) => inner.appendChild(link(label, withLang(href), `topnav__link${active === key ? ' is-active' : ''}`)));
-  nav.appendChild(inner);
-  append(header, utility, nameRow, nav);
+  items.forEach(([key,label,href])=>nav.appendChild(link(label,withLang(href),`brand-nav__link${active===key?' is-active':''}`)));
+
+  const utility=h('div','brand-header__utility');
+  append(utility,languageSwitch(),link(t.readEdition,withLang(`/edition/${current.date}`),'brand-cta'));
+
+  append(bar,brand,nav,utility);
+  header.appendChild(bar);
   return header;
 }
 
@@ -116,50 +121,55 @@ function footer() {
 }
 
 function marketPulse(current = editionNow()) {
-  const t = strings();
-  const priority = ['BTC','BRENT','STOXX','DXY'];
-  const items = priority.map(symbol => current.indicators.find(i => i.symbol === symbol)).filter(Boolean);
-  const section = h('section','market-pulse');
-  section.id = 'market-pulse';
+  const t=strings();
+  const priority=['BTC','BRENT','STOXX','DXY'];
+  const items=priority.map(symbol=>current.indicators.find(i=>i.symbol===symbol)).filter(Boolean);
+  const section=h('section','premium-section market-pulse');
+  section.id='market-pulse';
 
-  const head = h('div','market-pulse__head');
-  append(
-    head,
-    h('div','market-pulse__heading'),
-    link(t.viewAllData,withLang(`/edition/${current.date}#snapshot`),'text-link')
-  );
-  const heading = head.querySelector('.market-pulse__heading');
-  append(heading,h('div','kicker',t.marketPulse),h('p','market-pulse__hint',t.marketPulseHint));
+  const head=h('div','premium-section__head');
+  const titles=h('div','premium-section__titles');
+  append(titles,h('h2','premium-section__title',t.marketPulse),h('span','premium-section__eyebrow',t.marketPulseHint));
+  append(head,titles,link(t.viewAllData,withLang(`/edition/${current.date}#snapshot`),'section-link'));
+  section.appendChild(head);
 
-  const grid = h('div','market-pulse__grid');
-  items.forEach(item => {
-    const cell = h('div',`market-pulse__item market-pulse__item--${item.state || 'neutral'}`);
-    append(
-      cell,
-      h('div','market-pulse__top'),
-      h('div','market-pulse__value',item.value),
-      h('div','market-pulse__label',item.label)
-    );
-    const top = cell.querySelector('.market-pulse__top');
-    append(top,h('span','market-pulse__symbol',item.symbol),h('span','market-pulse__dot',''));
+  const grid=h('div','market-pulse__grid');
+  items.forEach((item,index)=>{
+    const cell=h('article',`market-pulse__item market-pulse__item--${item.state||'neutral'}`);
+    const icon=h('span','market-icon',item.symbol==='BTC'?'₿':item.symbol==='BRENT'?'●':item.symbol==='STOXX'?'▥':'$');
+    const top=h('div','market-pulse__identity');
+    const name=h('div','market-pulse__name');
+    append(name,h('strong','',item.symbol),h('span','',item.label));
+    append(top,icon,name);
+    const spark=h('div',`market-spark market-spark--${item.state||'neutral'} market-spark--${index}`);
+    append(cell,top,h('div','market-pulse__data'),spark);
+    const data=cell.querySelector('.market-pulse__data');
+    append(data,h('strong','market-pulse__value',item.value),h('span','market-pulse__status',item.state==='positive'?'● '+(lang==='es'?'Favorable':'Positive'):item.state==='negative'?'● '+(lang==='es'?'Bajo presión':'Under pressure'):'● '+(lang==='es'?'Neutral':'Neutral')));
     grid.appendChild(cell);
   });
-  append(section,head,grid);
+  section.appendChild(grid);
   return section;
 }
 
 function quickRead(current = editionNow()) {
-  const t = strings();
-  const labels = [t.changed,t.reaction,t.mainRisk];
-  const section = h('section','quick-read');
+  const t=strings();
+  const labels=[t.changed,t.reaction,t.mainRisk];
+  const glyphs=['▥','↗','△'];
+  const section=h('section','premium-section quick-read');
   section.id='overview';
-  const title = h('div','quick-read__title');
-  append(title,h('div','kicker',t.sixtySeconds));
-  section.appendChild(title);
-  const grid = h('div','quick-read__grid');
+
+  const head=h('div','premium-section__head');
+  const titles=h('div','premium-section__titles');
+  append(titles,h('h2','premium-section__title',t.sixtySeconds),h('span','premium-section__eyebrow',lang==='es'?'El contexto clave, sin ruido.':'The key context, without the noise.'));
+  head.appendChild(titles);
+  section.appendChild(head);
+
+  const grid=h('div','quick-read__grid');
   current.brief.slice(0,3).forEach((text,i)=>{
-    const item=h('article','quick-read__item');
-    append(item,h('div','quick-read__index',String(i+1).padStart(2,'0')),h('h3','quick-read__label',labels[i]||''),h('p','quick-read__text',text));
+    const item=h('article',`quick-read__item quick-read__item--${i}`);
+    append(item,h('div','quick-read__glyph',glyphs[i]),h('div','quick-read__content'),h('span','quick-read__chevron','›'));
+    const content=item.querySelector('.quick-read__content');
+    append(content,h('h3','quick-read__label',labels[i]||''),h('p','quick-read__text',text));
     grid.appendChild(item);
   });
   section.appendChild(grid);
@@ -232,98 +242,148 @@ function whaleRow(event) {
 }
 
 function home() {
-  const t = strings();
-  const current = editionNow();
-  setPageMeta('Market Ledger — Daily Brief', current.dek);
-  const frag = document.createDocumentFragment();
+  const t=strings();
+  const current=editionNow();
+  setPageMeta('Market Ledger — Daily Brief',current.dek);
+  const frag=document.createDocumentFragment();
   append(frag,masthead('today'));
 
-  const main=h('main','shell home-page');
+  const main=h('main','shell premium-home');
 
-  const lead=h('section','lead lead--simple');
-  const leadCopy=h('div','lead__copy');
+  const hero=h('section','premium-hero');
+  const copy=h('div','premium-hero__copy');
+  const meta=h('div','premium-hero__meta');
+  append(meta,h('span','',current.displayDate),h('span','premium-hero__live','● '+t.live));
   append(
-    leadCopy,
-    h('div','kicker',t.dailyBrief),
-    h('h1','lead__headline',current.headline),
-    h('p','lead__dek',current.dek),
-    h('div','lead__meta',`${current.label} · 12 min · ${current.displayDate}`),
-    link(t.fullEdition,withLang(`/edition/${current.date}`),'primary-link')
+    copy,
+    h('div','premium-hero__label',t.leadLabel),
+    meta,
+    h('h1','premium-hero__headline',current.headline),
+    h('p','premium-hero__dek',current.dek)
   );
-  const oneLine=h('aside','lead-summary');
-  append(oneLine,h('div','lead-summary__label',t.todayOneLine),h('p','lead-summary__text',t.oneLine));
-  append(lead,leadCopy,oneLine);
-  main.appendChild(lead);
+  const actions=h('div','premium-hero__actions');
+  append(actions,link(t.readEdition,withLang(`/edition/${current.date}`),'premium-button'),link(t.briefing,withLang('#overview'),'premium-text-link'));
+  copy.appendChild(actions);
 
-  main.appendChild(jumpNav(current,false));
+  const notes=h('div','premium-hero__notes');
+  [t.calmerSignals,t.broaderView,t.certainTomorrow].forEach((label,i)=>{
+    const n=h('div','premium-hero__note');
+    const text=(current.brief[i]||'').split('. ')[0]+'.';
+    append(n,h('span','premium-hero__note-label',label),h('p','',text));
+    notes.appendChild(n);
+  });
+  copy.appendChild(notes);
+
+  const visual=h('div','premium-hero__visual');
+  const visualCopy=h('div','premium-hero__visual-copy');
+  append(visualCopy,h('div','premium-hero__visual-title',t.premiumPromise),h('div','premium-hero__visual-rule',''),h('p','premium-hero__visual-caption',t.disciplineLine));
+  visual.appendChild(visualCopy);
+  append(hero,copy,visual);
+  main.appendChild(hero);
+
   main.appendChild(quickRead(current));
   main.appendChild(marketPulse(current));
 
-  const storiesHead=h('div','section-heading');
-  storiesHead.id='stories';
-  append(storiesHead,h('div','kicker',t.topStories),h('h2','section-heading__title',t.topStories));
-  main.appendChild(storiesHead);
+  const stories=h('section','premium-section premium-stories');
+  stories.id='stories';
+  const storiesHead=h('div','premium-section__head');
+  const storiesTitles=h('div','premium-section__titles');
+  append(storiesTitles,h('h2','premium-section__title',t.topStories),h('span','premium-section__eyebrow',lang==='es'?'Tres piezas. Una visión más nítida.':'Three stories. A sharper view.'));
+  append(storiesHead,storiesTitles,link(t.fullEdition,withLang(`/edition/${current.date}`),'section-link'));
+  stories.appendChild(storiesHead);
 
-  const keyStories=h('section','key-stories');
+  const storyGrid=h('div','premium-stories__grid');
   ['oil-relief','crypto-breakout','fed-ceiling'].forEach((id,index)=>{
     const story=current.stories.find(s=>s.id===id);
     if(!story)return;
-    const card=h('article',`key-story key-story--${index===0?'primary':'secondary'}`);
-    append(card,h('div','story__kicker',story.category),h('h3','key-story__title',story.title));
-    const why=h('div','key-story__why');
-    append(why,h('span','key-story__label',t.whyMatters),h('p','',story.dek));
-    const watch=h('div','key-story__watch');
-    append(watch,h('span','key-story__label',t.watch),h('p','',story.watch));
-    append(card,why,watch,link(t.readStory,withLang(`/edition/${current.date}#${story.id}`),'text-link'));
-    keyStories.appendChild(card);
+    const card=link('',withLang(`/edition/${current.date}#${story.id}`),'premium-story');
+    const visual=h('div',`premium-story__visual premium-story__visual--${story.id}`);
+    append(visual,h('span','premium-story__rank',String(index+1)));
+    const body=h('div','premium-story__body');
+    append(
+      body,
+      h('div','premium-story__category',story.category),
+      h('h3','premium-story__title',story.title),
+      h('p','premium-story__dek',story.dek),
+      h('div','premium-story__foot',t.readStory)
+    );
+    append(card,visual,body);
+    storyGrid.appendChild(card);
   });
-  main.appendChild(keyStories);
+  stories.appendChild(storyGrid);
+  main.appendChild(stories);
 
-  const moreWrap=h('section','more-section');
-  const moreHead=h('div','more-section__head');
-  append(moreHead,h('h2','more-section__title',t.moreToday),link(t.fullEdition,withLang(`/edition/${current.date}`),'text-link'));
-  moreWrap.appendChild(moreHead);
-  const more=h('div','more-today');
-  current.stories.filter(s=>!['oil-relief','crypto-breakout','fed-ceiling'].includes(s.id)).forEach(story=>{
-    const a=link('',withLang(`/edition/${current.date}#${story.id}`),'more-today__item');
-    append(a,h('div','more-today__category',story.category),h('h3','more-today__title',story.title),h('p','more-today__dek',story.dek),h('span','more-today__arrow','→'));
-    more.appendChild(a);
+  const scenarios=h('section','premium-section premium-scenarios');
+  scenarios.id='scenarios';
+  const sHead=h('div','premium-section__head');
+  const sTitles=h('div','premium-section__titles');
+  append(sTitles,h('h2','premium-section__title',t.playbook),h('span','premium-section__eyebrow',lang==='es'?'Tres caminos. Plan por delante.':'Three paths. Plan ahead.'));
+  sHead.appendChild(sTitles);
+  scenarios.appendChild(sHead);
+  const sGrid=h('div','premium-scenarios__grid');
+  current.scenarios.forEach((s,i)=>{
+    const row=h('article',`premium-scenario premium-scenario--${s.tone}`);
+    const glyph=i===0?'↗':i===1?'—':'↓';
+    append(row,h('span','premium-scenario__icon',glyph),h('div','premium-scenario__copy'));
+    const sc=row.querySelector('.premium-scenario__copy');
+    append(sc,h('div','premium-scenario__top'),h('p','premium-scenario__text',s.thesis));
+    const top=sc.querySelector('.premium-scenario__top');
+    append(top,h('strong','',s.name),h('span','premium-scenario__tag',i===0?'40%':i===1?'45%':'15%'));
+    sGrid.appendChild(row);
   });
-  moreWrap.appendChild(more);
-  main.appendChild(moreWrap);
-
-  const scenariosHead=h('div','section-heading');
-  scenariosHead.id='scenarios';
-  append(scenariosHead,h('div','kicker',t.playbook),h('h2','section-heading__title',t.playbook));
-  main.appendChild(scenariosHead);
-  const scenarios=h('section','scenario-grid scenario-grid--front');
-  current.scenarios.forEach((s,i)=>scenarios.appendChild(scenarioCard(s,i,true)));
+  scenarios.appendChild(sGrid);
   main.appendChild(scenarios);
 
-  const watchHead=h('div','section-heading');
-  watchHead.id='watchlist';
-  append(watchHead,h('div','kicker',t.watchlist),h('h2','section-heading__title',t.watchlist));
-  main.appendChild(watchHead);
-  const watch=h('section','watchlist watchlist--front');
-  const header=h('div','watchlist__header');
-  append(header,h('div','',t.watchAsset),h('div','',t.watchTrigger),h('div','',t.watchAction));
-  watch.appendChild(header);
-  current.watchlist.slice(0,5).forEach(item=>{
-    const row=h('div','watchlist__row');
-    append(row,h('div','watchlist__asset',item.asset),h('div','watchlist__reason',item.reason),h('div','watchlist__status',item.status));
-    watch.appendChild(row);
-  });
-  main.appendChild(watch);
+  const bottom=h('section','premium-bottom-grid');
 
-  const lower=h('section','home-lower');
-  const whale=h('div','home-lower__block');
+  const watch=h('div','premium-module premium-watch');
+  const watchHead=h('div','premium-module__head');
+  append(watchHead,h('h2','premium-module__title',t.watchlist),h('span','premium-module__eyebrow',lang==='es'?'Niveles clave. Lecturas claras.':'Key levels. Clear stances.'));
+  watch.appendChild(watchHead);
+  const table=h('div','premium-watch__table');
+  current.watchlist.slice(0,4).forEach(item=>{
+    const indicator=current.indicators.find(i=>i.symbol===item.asset.toUpperCase()||i.label.toLowerCase().includes(item.asset.toLowerCase()));
+    const row=h('div','premium-watch__row');
+    append(row,h('strong','premium-watch__asset',item.asset),h('span','premium-watch__trigger',item.reason),h('span','premium-watch__stance',item.status));
+    table.appendChild(row);
+  });
+  watch.appendChild(table);
+
+  const whale=h('div','premium-module premium-whale');
+  const whaleHead=h('div','premium-module__head');
+  append(whaleHead,h('h2','premium-module__title',t.whaleWatch),link(t.walletJournal,withLang('/whales'),'section-link'));
+  whale.appendChild(whaleHead);
   const localizedWhales=whalesNow();
-  append(whale,h('div','kicker',t.whaleWatch),h('h3','home-lower__title',localizedWhales.length?t.whaleActivity:t.noWhaleSignal),h('p','home-lower__text',localizedWhales.length?t.whaleActivityCopy:t.noWhaleSignalCopy),link(t.walletJournal,withLang('/whales'),'text-link'));
-  const research=h('div','home-lower__block');
-  const firstIdea=ideasNow()[0];
-  append(research,h('div','kicker',t.researchIdeas),h('h3','home-lower__title',firstIdea?.title||t.researchIdeas),h('p','home-lower__text',firstIdea?.summary||''),link(t.nav.ideas+' →',withLang('/ideas'),'text-link'));
-  append(lower,whale,research);
-  main.appendChild(lower);
+  if(localizedWhales.length){
+    localizedWhales.slice(0,2).forEach((w,i)=>{
+      const row=h('div','premium-signal-row');
+      append(row,h('span','premium-signal-row__icon',i===0?'◉':'◇'),h('div','premium-signal-row__copy'),h('span','premium-signal-row__time',w.time||''));
+      const cp=row.querySelector('.premium-signal-row__copy');
+      append(cp,h('strong','',`${w.token} · ${w.action}`),h('span','',w.note));
+      whale.appendChild(row);
+    });
+  }else{
+    const empty=h('div','premium-empty');
+    append(empty,h('span','premium-empty__icon','◌'),h('div','premium-empty__copy'));
+    const ec=empty.querySelector('.premium-empty__copy');
+    append(ec,h('strong','',t.noWhaleSignal),h('span','',t.noWhaleSignalCopy));
+    whale.appendChild(empty);
+  }
+
+  const research=h('div','premium-module premium-research');
+  const rHead=h('div','premium-module__head');
+  append(rHead,h('h2','premium-module__title',t.researchIdeas),link((lang==='es'?'Ver todas':'See all')+' →',withLang('/ideas'),'section-link'));
+  research.appendChild(rHead);
+  ideasNow().slice(0,3).forEach((idea,i)=>{
+    const row=link('',withLang(`/ideas/${idea.slug}`),'premium-research__row');
+    append(row,h('span','premium-research__index',String(i+1).padStart(2,'0')),h('div','premium-research__copy'),h('span','premium-research__arrow','›'));
+    const cp=row.querySelector('.premium-research__copy');
+    append(cp,h('strong','',idea.title),h('span','',idea.summary));
+    research.appendChild(row);
+  });
+
+  append(bottom,watch,whale,research);
+  main.appendChild(bottom);
 
   append(frag,main,footer());
   return frag;
