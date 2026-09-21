@@ -64,3 +64,16 @@ Market Ledger is bilingual: **English and Spanish**.
 - Preference is persisted locally and can also be represented by the `?lang=es|en` query parameter.
 - New daily editions must be generated in both languages at publication time.
 - There is one canonical archive and one set of market facts; translations must never diverge on numbers, dates, sources, scenarios or thesis logic.
+
+
+## Front page vs. full edition
+
+The homepage is a **cover**, not the entire report.
+
+- Show one dominant cover story, two supporting stories and a concise index of the rest.
+- Keep the three-point Daily Brief near the top.
+- Use compact scenarios on the cover; reserve full conditions and watch items for the dated edition.
+- Show only the highest-value watchlist items on the cover.
+- Whale Watch should stay visually quiet unless a verified event actually deserves attention.
+- The complete analysis, all stories, sources and full scenario detail live inside `/edition/YYYY-MM-DD`.
+- When choosing between adding more content to the homepage and linking into the edition, prefer the link.
