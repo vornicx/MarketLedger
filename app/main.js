@@ -325,146 +325,159 @@ function home() {
   const t=strings();
   const current=editionNow();
   setPageMeta('Market Ledger — Daily Brief',current.dek);
+
   const frag=document.createDocumentFragment();
   append(frag,masthead('today'));
 
-  const main=h('main','shell premium-home');
+  const main=h('main','shell social-home');
 
-  const hero=h('section','premium-hero');
-  const copy=h('div','premium-hero__copy');
-  const meta=h('div','premium-hero__meta');
-  append(meta,h('span','',current.displayDate),h('span','premium-hero__edition',t.lastUpdate));
+  // Edition intro: compact, readable and obvious.
+  const intro=h('section','edition-intro');
+  const introMeta=h('div','edition-intro__meta');
+  append(introMeta,h('span','edition-intro__date',current.displayDate),h('span','edition-intro__dot','•'),h('span','edition-intro__label',current.label));
   append(
-    copy,
-    h('div','premium-hero__label',t.leadLabel),
-    meta,
-    h('h1','premium-hero__headline',current.headline),
-    h('p','premium-hero__dek',current.dek)
+    intro,
+    h('div','edition-intro__eyebrow',t.dailyBrief),
+    introMeta,
+    h('h1','edition-intro__headline',current.headline),
+    h('p','edition-intro__dek',current.dek)
   );
-  const actions=h('div','premium-hero__actions');
-  append(actions,link(t.readEdition,withLang(`/edition/${current.date}`),'premium-button'),link(t.briefing,withLang('#overview'),'premium-text-link'));
-  copy.appendChild(actions);
+  const actions=h('div','edition-intro__actions');
+  append(actions,link(t.readEdition,withLang(`/edition/${current.date}`),'primary-action'),link(t.briefing,withLang('#overview'),'secondary-action'));
+  intro.appendChild(actions);
+  main.appendChild(intro);
 
-  const notes=h('div','premium-hero__notes');
-  [t.calmerSignals,t.broaderView,t.certainTomorrow].forEach((label,i)=>{
-    const n=h('div','premium-hero__note');
-    const text=(current.brief[i]||'').split('. ')[0]+'.';
-    append(n,h('span','premium-hero__note-label',label),h('p','',text));
-    notes.appendChild(n);
-  });
-  copy.appendChild(notes);
+  // Lead image behaves like a social/editorial media card.
+  const leadMedia=mediaFigure(storyMedia('hero'),'lead-media');
+  main.appendChild(leadMedia);
 
-  const visual=mediaFigure(storyMedia('hero'),'premium-hero__visual');
-  const visualCopy=h('div','premium-hero__visual-copy');
-  append(visualCopy,h('div','premium-hero__visual-title',t.premiumPromise),h('div','premium-hero__visual-rule',''),h('p','premium-hero__visual-caption',t.disciplineLine));
-  visual.appendChild(visualCopy);
-  append(hero,copy,visual);
-  main.appendChild(hero);
-
-  main.appendChild(quickRead(current));
+  // Market cards: clear, horizontally scannable.
   main.appendChild(marketPulse(current));
 
-  const stories=h('section','premium-section premium-stories');
+  // Desktop: readable feed + utility rail. Mobile: one continuous feed.
+  const layout=h('div','feed-layout');
+  const feed=h('section','feed-main');
+  const rail=h('aside','feed-rail');
+
+  // 60-second read as three feed posts.
+  const quick=h('section','feed-block');
+  quick.id='overview';
+  const quickHead=h('div','feed-heading');
+  append(quickHead,h('h2','feed-heading__title',t.sixtySeconds),h('span','feed-heading__meta',lang==='es'?'Lo esencial primero':'The essentials first'));
+  quick.appendChild(quickHead);
+  const quickLabels=[t.changed,t.reaction,t.mainRisk];
+  const quickIcons=['01','02','03'];
+  current.brief.slice(0,3).forEach((text,i)=>{
+    const post=h('article','brief-post');
+    append(post,h('div','brief-post__index',quickIcons[i]),h('div','brief-post__content'));
+    const content=post.querySelector('.brief-post__content');
+    append(content,h('h3','brief-post__title',quickLabels[i]),h('p','brief-post__text',text));
+    quick.appendChild(post);
+  });
+  feed.appendChild(quick);
+
+  // Main stories: feed cards, image + headline + context.
+  const stories=h('section','feed-block feed-stories');
   stories.id='stories';
-  const storiesHead=h('div','premium-section__head');
-  const storiesTitles=h('div','premium-section__titles');
-  append(storiesTitles,h('h2','premium-section__title',t.topStories),h('span','premium-section__eyebrow',lang==='es'?'Tres piezas. Una visión más nítida.':'Three stories. A sharper view.'));
-  append(storiesHead,storiesTitles,link(t.fullEdition,withLang(`/edition/${current.date}`),'section-link'));
+  const storiesHead=h('div','feed-heading');
+  append(storiesHead,h('h2','feed-heading__title',t.topStories),link(t.fullEdition,withLang(`/edition/${current.date}`),'feed-heading__link'));
   stories.appendChild(storiesHead);
 
-  const storyGrid=h('div','premium-stories__grid');
-  ['oil-relief','crypto-breakout','fed-ceiling'].forEach((id,index)=>{
+  ['oil-relief','crypto-breakout','fed-ceiling','equities-tech','europe-asia'].forEach((id,index)=>{
     const story=current.stories.find(s=>s.id===id);
     if(!story)return;
-    const card=link('',withLang(`/edition/${current.date}#${story.id}`),'premium-story');
-    const media=storyMedia(story.id);
-    const visual=mediaFigure(media,`premium-story__visual premium-story__visual--${story.id}`);
-    append(visual,h('span','premium-story__rank',String(index+1)));
-    const body=h('div','premium-story__body');
+    const card=link('',withLang(`/edition/${current.date}#${story.id}`),'feed-story');
+    const media=mediaFigure(storyMedia(story.id),'feed-story__media');
+    const body=h('div','feed-story__body');
+    const meta=h('div','feed-story__meta');
+    append(meta,h('span','feed-story__category',story.category),h('span','feed-story__rank',String(index+1).padStart(2,'0')));
     append(
       body,
-      h('div','premium-story__category',story.category),
-      h('h3','premium-story__title',story.title),
-      h('p','premium-story__dek',story.dek),
-      h('div','premium-story__foot',t.readStory)
+      meta,
+      h('h3','feed-story__title',story.title),
+      h('p','feed-story__dek',story.dek),
+      h('div','feed-story__watch'),
+      h('span','feed-story__read',t.readStory)
     );
-    append(card,visual,body);
-    storyGrid.appendChild(card);
+    const watch=body.querySelector('.feed-story__watch');
+    append(watch,h('strong','',t.watch+':'),h('span','',story.watch));
+    append(card,media,body);
+    stories.appendChild(card);
   });
-  stories.appendChild(storyGrid);
-  main.appendChild(stories);
+  feed.appendChild(stories);
 
-  const scenarios=h('section','premium-section premium-scenarios');
+  // Scenarios as simple decision rows.
+  const scenarios=h('section','feed-block feed-scenarios');
   scenarios.id='scenarios';
-  const sHead=h('div','premium-section__head');
-  const sTitles=h('div','premium-section__titles');
-  append(sTitles,h('h2','premium-section__title',t.playbook),h('span','premium-section__eyebrow',lang==='es'?'Tres caminos. Plan por delante.':'Three paths. Plan ahead.'));
-  sHead.appendChild(sTitles);
+  const sHead=h('div','feed-heading');
+  append(sHead,h('h2','feed-heading__title',t.playbook),h('span','feed-heading__meta',lang==='es'?'Qué tendría que pasar':'What would need to happen'));
   scenarios.appendChild(sHead);
-  const sGrid=h('div','premium-scenarios__grid');
   current.scenarios.forEach((s,i)=>{
-    const row=h('article',`premium-scenario premium-scenario--${s.tone}`);
-    const glyph=i===0?'↗':i===1?'—':'↓';
-    append(row,h('span','premium-scenario__icon',glyph),h('div','premium-scenario__copy'));
-    const sc=row.querySelector('.premium-scenario__copy');
-    append(sc,h('div','premium-scenario__top'),h('p','premium-scenario__text',s.thesis));
-    const top=sc.querySelector('.premium-scenario__top');
-    append(top,h('strong','',s.name));
-    sGrid.appendChild(row);
+    const row=h('article',`scenario-row scenario-row--${s.tone}`);
+    const marker=h('span','scenario-row__marker',i===0?'↗':i===1?'—':'↓');
+    const copy=h('div','scenario-row__copy');
+    append(copy,h('h3','scenario-row__title',s.name),h('p','scenario-row__text',s.thesis));
+    const list=h('ul','scenario-row__conditions');
+    s.conditions.slice(0,2).forEach(x=>list.appendChild(h('li','',x)));
+    copy.appendChild(list);
+    append(row,marker,copy);
+    scenarios.appendChild(row);
   });
-  scenarios.appendChild(sGrid);
-  main.appendChild(scenarios);
+  feed.appendChild(scenarios);
 
-  const bottom=h('section','premium-bottom-grid');
-
-  const watch=h('div','premium-module premium-watch');
-  const watchHead=h('div','premium-module__head');
-  append(watchHead,h('h2','premium-module__title',t.watchlist),h('span','premium-module__eyebrow',lang==='es'?'Niveles clave. Lecturas claras.':'Key levels. Clear stances.'));
-  watch.appendChild(watchHead);
-  const table=h('div','premium-watch__table');
-  current.watchlist.slice(0,4).forEach(item=>{
-    const indicator=current.indicators.find(i=>i.symbol===item.asset.toUpperCase()||i.label.toLowerCase().includes(item.asset.toLowerCase()));
-    const row=h('div','premium-watch__row');
-    append(row,h('strong','premium-watch__asset',item.asset),h('span','premium-watch__trigger',item.reason),h('span','premium-watch__stance',item.status));
-    table.appendChild(row);
+  // Rail: data and utilities never interrupt reading.
+  const watch=h('section','rail-card');
+  watch.id='watchlist';
+  append(watch,h('div','rail-card__head'),h('div','rail-list'));
+  const watchHead=watch.querySelector('.rail-card__head');
+  append(watchHead,h('h2','rail-card__title',t.watchlist),h('span','rail-card__meta',lang==='es'?'Hoy':'Today'));
+  const watchList=watch.querySelector('.rail-list');
+  current.watchlist.slice(0,5).forEach(item=>{
+    const row=h('div','rail-watch');
+    append(row,h('div','rail-watch__top'),h('p','rail-watch__reason',item.reason));
+    const top=row.querySelector('.rail-watch__top');
+    append(top,h('strong','rail-watch__asset',item.asset),h('span','rail-watch__stance',item.status));
+    watchList.appendChild(row);
   });
-  watch.appendChild(table);
+  rail.appendChild(watch);
 
-  const whale=h('div','premium-module premium-whale');
-  const whaleHead=h('div','premium-module__head');
-  append(whaleHead,h('h2','premium-module__title',t.whaleWatch),link(t.walletJournal,withLang('/whales'),'section-link'));
+  const whale=h('section','rail-card');
+  const whaleHead=h('div','rail-card__head');
+  append(whaleHead,h('h2','rail-card__title',t.whaleWatch),link((lang==='es'?'Abrir':'Open')+' →',withLang('/whales'),'rail-card__link'));
   whale.appendChild(whaleHead);
   const localizedWhales=whalesNow();
   if(localizedWhales.length){
-    localizedWhales.slice(0,2).forEach((w,i)=>{
-      const row=h('div','premium-signal-row');
-      append(row,h('span','premium-signal-row__icon',i===0?'◉':'◇'),h('div','premium-signal-row__copy'),h('span','premium-signal-row__time',w.time||''));
-      const cp=row.querySelector('.premium-signal-row__copy');
+    localizedWhales.slice(0,3).forEach(w=>{
+      const row=h('div','rail-signal');
+      append(row,h('span','rail-signal__dot',''),h('div','rail-signal__copy'));
+      const cp=row.querySelector('.rail-signal__copy');
       append(cp,h('strong','',`${w.token} · ${w.action}`),h('span','',w.note));
       whale.appendChild(row);
     });
   }else{
-    const empty=h('div','premium-empty');
-    append(empty,h('span','premium-empty__icon','◌'),h('div','premium-empty__copy'));
-    const ec=empty.querySelector('.premium-empty__copy');
+    const empty=h('div','rail-empty');
+    append(empty,h('span','rail-empty__icon','◌'),h('div','rail-empty__copy'));
+    const ec=empty.querySelector('.rail-empty__copy');
     append(ec,h('strong','',t.noWhaleSignal),h('span','',t.noWhaleSignalCopy));
     whale.appendChild(empty);
   }
+  rail.appendChild(whale);
 
-  const research=h('div','premium-module premium-research');
-  const rHead=h('div','premium-module__head');
-  append(rHead,h('h2','premium-module__title',t.researchIdeas),link((lang==='es'?'Ver todas':'See all')+' →',withLang('/ideas'),'section-link'));
-  research.appendChild(rHead);
+  const research=h('section','rail-card');
+  const researchHead=h('div','rail-card__head');
+  append(researchHead,h('h2','rail-card__title',t.researchIdeas),link((lang==='es'?'Ver todas':'See all')+' →',withLang('/ideas'),'rail-card__link'));
+  research.appendChild(researchHead);
   ideasNow().slice(0,3).forEach((idea,i)=>{
-    const row=link('',withLang(`/ideas/${idea.slug}`),'premium-research__row');
-    append(row,h('span','premium-research__index',String(i+1).padStart(2,'0')),h('div','premium-research__copy'),h('span','premium-research__arrow','›'));
-    const cp=row.querySelector('.premium-research__copy');
+    const row=link('',withLang(`/ideas/${idea.slug}`),'rail-research');
+    append(row,h('span','rail-research__index',String(i+1).padStart(2,'0')),h('div','rail-research__copy'));
+    const cp=row.querySelector('.rail-research__copy');
     append(cp,h('strong','',idea.title),h('span','',idea.summary));
     research.appendChild(row);
   });
+  rail.appendChild(research);
 
-  append(bottom,watch,whale,research);
-  main.appendChild(bottom);
+  append(layout,feed,rail);
+  main.appendChild(layout);
 
   append(frag,main,footer());
   return frag;
