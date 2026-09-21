@@ -88,11 +88,8 @@ function masthead(active = 'today') {
   const inner = h('div', 'shell topnav__inner');
   const items = [
     ['today', t.nav.today, '/'],
-    ['markets', t.nav.markets, '/#markets'],
-    ['crypto', t.nav.crypto, '/#crypto'],
-    ['macro', t.nav.macro, '/#macro'],
-    ['whales', t.nav.whales, '/whales'],
     ['ideas', t.nav.ideas, '/ideas'],
+    ['whales', t.nav.whales, '/whales'],
     ['scorecard', t.nav.scorecard, '/scorecard'],
     ['archive', t.nav.archive, '/archive'],
   ];
@@ -118,24 +115,87 @@ function footer() {
   return f;
 }
 
-function ticker(current = editionNow()) {
-  const wrap = h('div', 'ticker');
-  const inner = h('div', 'shell ticker__inner');
-  current.indicators.forEach(item => {
-    const cell = h('div', 'ticker__item');
-    append(cell, h('div', 'ticker__symbol', item.symbol), h('div', 'ticker__value', item.value), h('div', 'ticker__note', item.note));
-    inner.appendChild(cell);
+function marketPulse(current = editionNow()) {
+  const t = strings();
+  const priority = ['BTC','BRENT','STOXX','DXY'];
+  const items = priority.map(symbol => current.indicators.find(i => i.symbol === symbol)).filter(Boolean);
+  const section = h('section','market-pulse');
+  section.id = 'market-pulse';
+
+  const head = h('div','market-pulse__head');
+  append(
+    head,
+    h('div','market-pulse__heading'),
+    link(t.viewAllData,withLang(`/edition/${current.date}#snapshot`),'text-link')
+  );
+  const heading = head.querySelector('.market-pulse__heading');
+  append(heading,h('div','kicker',t.marketPulse),h('p','market-pulse__hint',t.marketPulseHint));
+
+  const grid = h('div','market-pulse__grid');
+  items.forEach(item => {
+    const cell = h('div',`market-pulse__item market-pulse__item--${item.state || 'neutral'}`);
+    append(
+      cell,
+      h('div','market-pulse__top'),
+      h('div','market-pulse__value',item.value),
+      h('div','market-pulse__label',item.label)
+    );
+    const top = cell.querySelector('.market-pulse__top');
+    append(top,h('span','market-pulse__symbol',item.symbol),h('span','market-pulse__dot',''));
+    grid.appendChild(cell);
   });
-  wrap.appendChild(inner);
-  return wrap;
+  append(section,head,grid);
+  return section;
+}
+
+function quickRead(current = editionNow()) {
+  const t = strings();
+  const labels = [t.changed,t.reaction,t.mainRisk];
+  const section = h('section','quick-read');
+  section.id='overview';
+  const title = h('div','quick-read__title');
+  append(title,h('div','kicker',t.sixtySeconds));
+  section.appendChild(title);
+  const grid = h('div','quick-read__grid');
+  current.brief.slice(0,3).forEach((text,i)=>{
+    const item=h('article','quick-read__item');
+    append(item,h('div','quick-read__index',String(i+1).padStart(2,'0')),h('h3','quick-read__label',labels[i]||''),h('p','quick-read__text',text));
+    grid.appendChild(item);
+  });
+  section.appendChild(grid);
+  return section;
+}
+
+function jumpNav(current, fullEdition = false) {
+  const t = strings();
+  const nav=h('nav','jump-nav');
+  nav.setAttribute('aria-label',t.jumpTo);
+  const inner=h('div','jump-nav__inner');
+  const items = fullEdition
+    ? [[t.overview,'#overview'],[t.marketSnapshot,'#snapshot'],[t.analysis,'#analysis'],[t.scenariosLabel,'#scenarios'],[t.sourcesLabel,'#sources']]
+    : [[t.overview,'#overview'],[t.marketPulse,'#market-pulse'],[t.topStories,'#stories'],[t.scenariosLabel,'#scenarios'],[t.watchlist,'#watchlist']];
+  items.forEach(([label,hash])=>inner.appendChild(link(label,withLang(`/${fullEdition ? 'edition/'+current.date : ''}${hash}`),'jump-nav__link')));
+  nav.appendChild(inner);
+  return nav;
 }
 
 function storyCard(story, compact = false) {
   const t = strings();
   const article = h('article', compact ? 'story story--compact' : 'story');
   article.id = story.id;
-  append(article, h('div', 'story__kicker', story.category), h('h3', 'story__title', story.title), h('p', 'story__dek', story.dek));
-  if (!compact) append(article, h('p', 'story__body', story.analysis), h('p', 'story__watch', `${t.watch}: ${story.watch}`));
+  append(article,h('div','story__kicker',story.category),h('h3','story__title',story.title));
+
+  const why = h('div','story__explain story__explain--why');
+  append(why,h('div','story__explain-label',t.whyMatters),h('p','story__dek',story.dek));
+  article.appendChild(why);
+
+  if (!compact) {
+    const meaning=h('div','story__explain');
+    append(meaning,h('div','story__explain-label',t.analysisLabel),h('p','story__body',story.analysis));
+    const watch=h('div','story__explain story__explain--watch');
+    append(watch,h('div','story__explain-label',t.watch),h('p','story__watch',story.watch));
+    append(article,meaning,watch);
+  }
   return article;
 }
 
@@ -176,174 +236,173 @@ function home() {
   const current = editionNow();
   setPageMeta('Market Ledger — Daily Brief', current.dek);
   const frag = document.createDocumentFragment();
-  append(frag, masthead('today'), ticker(current));
+  append(frag,masthead('today'));
 
-  const main = h('main','shell home-page');
+  const main=h('main','shell home-page');
 
-  // Cover story: one strong idea, not a dashboard wall.
-  const lead = h('section','lead');
-  const leadCopy = h('div','lead__copy');
+  const lead=h('section','lead lead--simple');
+  const leadCopy=h('div','lead__copy');
   append(
     leadCopy,
     h('div','kicker',t.dailyBrief),
     h('h1','lead__headline',current.headline),
     h('p','lead__dek',current.dek),
-    h('div','lead__meta',`${current.label} · 12 min · ${current.displayDate}`)
+    h('div','lead__meta',`${current.label} · 12 min · ${current.displayDate}`),
+    link(t.fullEdition,withLang(`/edition/${current.date}`),'primary-link')
   );
-  const leadAside = h('aside','lead__aside');
-  append(
-    leadAside,
-    h('div','aside-rule',t.todayOneLine),
-    h('p','lead__aside-quote',t.oneLine),
-    link(t.fullEdition,withLang(`/edition/${current.date}`),'text-link')
-  );
-  append(lead,leadCopy,leadAside);
+  const oneLine=h('aside','lead-summary');
+  append(oneLine,h('div','lead-summary__label',t.todayOneLine),h('p','lead-summary__text',t.oneLine));
+  append(lead,leadCopy,oneLine);
   main.appendChild(lead);
 
-  // Three-point briefing.
-  main.appendChild(rule(t.editorialNote));
-  const note = h('section','brief-grid brief-grid--front');
-  current.brief.slice(0,3).forEach((p,i) => {
-    const block = h('div','brief-paragraph');
-    append(block,h('span','drop-index',String(i+1).padStart(2,'0')),h('p','',p));
-    note.appendChild(block);
-  });
-  main.appendChild(note);
+  main.appendChild(jumpNav(current,false));
+  main.appendChild(quickRead(current));
+  main.appendChild(marketPulse(current));
 
-  // Front page: one featured analysis + two supporting stories.
-  main.appendChild(rule(t.topStories));
-  const front = h('section','front-stories');
-  const featured = current.stories.find(s=>s.id==='oil-relief') || current.stories[0];
-  const feature = h('article','front-feature');
-  feature.id = 'macro';
-  append(
-    feature,
-    h('div','story__kicker',featured.category),
-    h('h2','front-feature__title',featured.title),
-    h('p','front-feature__dek',featured.dek),
-    h('p','front-feature__body',featured.analysis),
-    h('p','story__watch',`${t.watch}: ${featured.watch}`),
-    link(t.readFullAnalysis,withLang(`/edition/${current.date}#${featured.id}`),'text-link')
-  );
+  const storiesHead=h('div','section-heading');
+  storiesHead.id='stories';
+  append(storiesHead,h('div','kicker',t.topStories),h('h2','section-heading__title',t.topStories));
+  main.appendChild(storiesHead);
 
-  const support = h('div','front-support');
-  ['crypto-breakout','fed-ceiling'].forEach(id=>{
+  const keyStories=h('section','key-stories');
+  ['oil-relief','crypto-breakout','fed-ceiling'].forEach((id,index)=>{
     const story=current.stories.find(s=>s.id===id);
-    if(!story) return;
-    const a=link('',withLang(`/edition/${current.date}#${story.id}`),'front-support__story');
-    append(a,h('div','story__kicker',story.category),h('h3','front-support__title',story.title),h('p','front-support__dek',story.dek),h('span','front-support__link',t.readStory));
-    support.appendChild(a);
+    if(!story)return;
+    const card=h('article',`key-story key-story--${index===0?'primary':'secondary'}`);
+    append(card,h('div','story__kicker',story.category),h('h3','key-story__title',story.title));
+    const why=h('div','key-story__why');
+    append(why,h('span','key-story__label',t.whyMatters),h('p','',story.dek));
+    const watch=h('div','key-story__watch');
+    append(watch,h('span','key-story__label',t.watch),h('p','',story.watch));
+    append(card,why,watch,link(t.readStory,withLang(`/edition/${current.date}#${story.id}`),'text-link'));
+    keyStories.appendChild(card);
   });
-  append(front,feature,support);
-  main.appendChild(front);
+  main.appendChild(keyStories);
 
-  // Remaining stories become a clean index instead of full-length copy.
-  main.appendChild(rule(t.moreToday));
-  const more = h('section','more-today');
-  current.stories
-    .filter(s=>![featured.id,'crypto-breakout','fed-ceiling'].includes(s.id))
-    .forEach(story=>{
-      const a=link('',withLang(`/edition/${current.date}#${story.id}`),'more-today__item');
-      append(
-        a,
-        h('div','more-today__category',story.category),
-        h('h3','more-today__title',story.title),
-        h('p','more-today__dek',story.dek),
-        h('span','more-today__arrow','→')
-      );
-      more.appendChild(a);
-    });
-  main.appendChild(more);
+  const moreWrap=h('section','more-section');
+  const moreHead=h('div','more-section__head');
+  append(moreHead,h('h2','more-section__title',t.moreToday),link(t.fullEdition,withLang(`/edition/${current.date}`),'text-link'));
+  moreWrap.appendChild(moreHead);
+  const more=h('div','more-today');
+  current.stories.filter(s=>!['oil-relief','crypto-breakout','fed-ceiling'].includes(s.id)).forEach(story=>{
+    const a=link('',withLang(`/edition/${current.date}#${story.id}`),'more-today__item');
+    append(a,h('div','more-today__category',story.category),h('h3','more-today__title',story.title),h('p','more-today__dek',story.dek),h('span','more-today__arrow','→'));
+    more.appendChild(a);
+  });
+  moreWrap.appendChild(more);
+  main.appendChild(moreWrap);
 
-  // Scenario map: compact on the cover, full inside the edition.
-  main.appendChild(rule(t.playbook));
-  const scenarios = h('section','scenario-grid scenario-grid--front');
+  const scenariosHead=h('div','section-heading');
+  scenariosHead.id='scenarios';
+  append(scenariosHead,h('div','kicker',t.playbook),h('h2','section-heading__title',t.playbook));
+  main.appendChild(scenariosHead);
+  const scenarios=h('section','scenario-grid scenario-grid--front');
   current.scenarios.forEach((s,i)=>scenarios.appendChild(scenarioCard(s,i,true)));
   main.appendChild(scenarios);
 
-  // Watchlist comes before the wallet module: this is the actionable cover furniture.
-  main.appendChild(rule(t.watchlist));
-  const watch = h('section','watchlist watchlist--front');
-  current.watchlist.slice(0,4).forEach(item=>{
+  const watchHead=h('div','section-heading');
+  watchHead.id='watchlist';
+  append(watchHead,h('div','kicker',t.watchlist),h('h2','section-heading__title',t.watchlist));
+  main.appendChild(watchHead);
+  const watch=h('section','watchlist watchlist--front');
+  const header=h('div','watchlist__header');
+  append(header,h('div','',t.watchAsset),h('div','',t.watchTrigger),h('div','',t.watchAction));
+  watch.appendChild(header);
+  current.watchlist.slice(0,5).forEach(item=>{
     const row=h('div','watchlist__row');
     append(row,h('div','watchlist__asset',item.asset),h('div','watchlist__reason',item.reason),h('div','watchlist__status',item.status));
     watch.appendChild(row);
   });
-  const watchFoot=h('div','module-foot');
-  append(watchFoot,link(t.fullEdition,withLang(`/edition/${current.date}`),'text-link'));
-  watch.appendChild(watchFoot);
   main.appendChild(watch);
 
-  // Whale Watch is deliberately quiet unless something actually matters.
-  main.appendChild(rule(t.whaleWatch));
-  const whaleBrief=h('section','whale-brief');
+  const lower=h('section','home-lower');
+  const whale=h('div','home-lower__block');
   const localizedWhales=whalesNow();
-  const whaleCopy=h('div','whale-brief__copy');
-  append(
-    whaleCopy,
-    h('div','kicker',t.walletMonitor),
-    h('h3','whale-brief__title',localizedWhales.length ? t.whaleActivity : t.noWhaleSignal),
-    h('p','whale-brief__text',localizedWhales.length ? t.whaleActivityCopy : t.noWhaleSignalCopy)
-  );
-  const whaleAction=h('div','whale-brief__action');
-  append(whaleAction,link(t.walletJournal,withLang('/whales'),'text-link'));
-  append(whaleBrief,whaleCopy,whaleAction);
-  main.appendChild(whaleBrief);
-
-  // Research remains visible but secondary.
-  main.appendChild(rule(t.researchIdeas));
-  const ideasGrid=h('section','ideas-grid ideas-grid--front');
-  ideasNow().slice(0,2).forEach(item=>{
-    const a=link('',withLang(`/ideas/${item.slug}`),'idea-card');
-    append(a,h('div','idea-card__asset',item.asset),h('h3','idea-card__title',item.title),h('p','idea-card__summary',item.summary),h('div','idea-card__meta',`${item.status} · ${t.lastReviewed} ${item.lastReviewed}`));
-    ideasGrid.appendChild(a);
-  });
-  main.appendChild(ideasGrid);
-
-  const close=h('section','closing-note closing-note--front');
-  append(close,h('div','kicker',t.archiveWhy),h('h2','closing-note__title',t.archiveWhyTitle),h('p','',t.archiveWhyCopy),link(t.browseArchive,withLang('/archive'),'text-link text-link--large'));
-  main.appendChild(close);
+  append(whale,h('div','kicker',t.whaleWatch),h('h3','home-lower__title',localizedWhales.length?t.whaleActivity:t.noWhaleSignal),h('p','home-lower__text',localizedWhales.length?t.whaleActivityCopy:t.noWhaleSignalCopy),link(t.walletJournal,withLang('/whales'),'text-link'));
+  const research=h('div','home-lower__block');
+  const firstIdea=ideasNow()[0];
+  append(research,h('div','kicker',t.researchIdeas),h('h3','home-lower__title',firstIdea?.title||t.researchIdeas),h('p','home-lower__text',firstIdea?.summary||''),link(t.nav.ideas+' →',withLang('/ideas'),'text-link'));
+  append(lower,whale,research);
+  main.appendChild(lower);
 
   append(frag,main,footer());
   return frag;
 }
 
 function editionPage(date) {
-  const t = strings();
-  const current = editionsNow().find(e=>e.date===date);
-  if (!current) return notFound(`${t.noEdition} ${date}.`);
+  const t=strings();
+  const current=editionsNow().find(e=>e.date===date);
+  if(!current)return notFound(`${t.noEdition} ${date}.`);
   setPageMeta(`Market Ledger — ${current.displayDate}`,current.dek);
+
   const frag=document.createDocumentFragment();
-  append(frag,masthead('today'),ticker(current));
+  append(frag,masthead('today'));
   const main=h('main','shell edition-page');
+
   const head=h('header','edition-head');
-  append(head,h('div','kicker',`${current.label} · ${t.dailyEdition}`),h('h1','edition-head__title',current.headline),h('p','edition-head__dek',current.dek),h('div','edition-head__meta',current.displayDate));
+  append(
+    head,
+    h('div','kicker',`${current.label} · ${t.dailyEdition}`),
+    h('h1','edition-head__title',current.headline),
+    h('p','edition-head__dek',current.dek),
+    h('div','edition-head__meta',current.displayDate)
+  );
   main.appendChild(head);
-  main.appendChild(rule(t.dailyBrief));
-  current.brief.forEach(p=>main.appendChild(h('p','edition-prose',p)));
-  main.appendChild(rule(t.marketSnapshot));
+  main.appendChild(jumpNav(current,true));
+  main.appendChild(quickRead(current));
+
+  const snapshotHead=h('div','section-heading');snapshotHead.id='snapshot';
+  append(snapshotHead,h('div','kicker',t.marketSnapshot),h('h2','section-heading__title',t.marketSnapshot));
+  main.appendChild(snapshotHead);
   const snapshot=h('section','snapshot-grid');
-  current.indicators.forEach(i=>{const c=h('div','snapshot-cell');append(c,h('div','snapshot-cell__symbol',i.symbol),h('div','snapshot-cell__label',i.label),h('div','snapshot-cell__value',i.value),h('div','snapshot-cell__note',i.note));snapshot.appendChild(c);});
+  current.indicators.forEach(i=>{
+    const cell=h('div',`snapshot-cell snapshot-cell--${i.state||'neutral'}`);
+    append(cell,h('div','snapshot-cell__symbol',i.symbol),h('div','snapshot-cell__label',i.label),h('div','snapshot-cell__value',i.value),h('div','snapshot-cell__note',i.note));
+    snapshot.appendChild(cell);
+  });
   main.appendChild(snapshot);
-  main.appendChild(rule(t.analysis));
+
+  const analysisHead=h('div','section-heading');analysisHead.id='analysis';
+  append(analysisHead,h('div','kicker',t.analysis),h('h2','section-heading__title',t.analysis));
+  main.appendChild(analysisHead);
   const stories=h('section','edition-stories');
   current.stories.forEach(s=>stories.appendChild(storyCard(s)));
   main.appendChild(stories);
-  main.appendChild(rule(t.playbook));
+
+  const scenariosHead=h('div','section-heading');scenariosHead.id='scenarios';
+  append(scenariosHead,h('div','kicker',t.playbook),h('h2','section-heading__title',t.playbook));
+  main.appendChild(scenariosHead);
   const scenarios=h('section','scenario-grid');
   current.scenarios.forEach((s,i)=>scenarios.appendChild(scenarioCard(s,i)));
   main.appendChild(scenarios);
-  main.appendChild(rule(t.thenNow));
+
+  const thenHead=h('div','section-heading');
+  append(thenHead,h('div','kicker',t.thenNow),h('h2','section-heading__title',t.thenNow));
+  main.appendChild(thenHead);
   const tvn=h('section','then-now');
-  const left=h('div','then-now__column'); append(left,h('div','kicker',t.whatKnew),h('h3','',t.frozen),h('p','',t.frozenCopy));
-  const right=h('div','then-now__column'); append(right,h('div','kicker',t.whatHappened),h('h3','',t.retrospective),h('p','',t.retrospectiveCopy));
-  append(tvn,left,right); main.appendChild(tvn);
-  main.appendChild(rule(t.sourcesNotes));
+  const left=h('div','then-now__column');append(left,h('div','kicker',t.whatKnew),h('h3','',t.frozen),h('p','',t.frozenCopy));
+  const right=h('div','then-now__column');append(right,h('div','kicker',t.whatHappened),h('h3','',t.retrospective),h('p','',t.retrospectiveCopy));
+  append(tvn,left,right);main.appendChild(tvn);
+
+  const sourcesHead=h('div','section-heading');sourcesHead.id='sources';
+  append(sourcesHead,h('div','kicker',t.sourcesNotes),h('h2','section-heading__title',t.sourcesNotes));
+  main.appendChild(sourcesHead);
   const sources=h('section','sources');
-  current.sources.forEach((s,i)=>{const row=h('div','sources__row');const label=s.href?link(s.label,s.href,'sources__label sources__link'):h('div','sources__label',s.label);if(label instanceof HTMLAnchorElement){label.target='_blank';label.rel='noreferrer';}append(row,h('div','sources__index',String(i+1).padStart(2,'0')),label,h('div','sources__note',s.note));sources.appendChild(row);});
+  current.sources.forEach((s,i)=>{
+    const row=h('div','sources__row');
+    const label=s.href?link(s.label,s.href,'sources__label sources__link'):h('div','sources__label',s.label);
+    if(label instanceof HTMLAnchorElement){label.target='_blank';label.rel='noreferrer';}
+    append(row,h('div','sources__index',String(i+1).padStart(2,'0')),label,h('div','sources__note',s.note));
+    sources.appendChild(row);
+  });
   main.appendChild(sources);
-  const pager=h('nav','edition-pager');append(pager,link(t.backArchive,withLang('/archive'),'text-link'),h('span','edition-pager__current',current.displayDate),h('span','edition-pager__disabled',t.nextEdition));main.appendChild(pager);
-  append(frag,main,footer()); return frag;
+
+  const pager=h('nav','edition-pager');
+  append(pager,link(t.backArchive,withLang('/archive'),'text-link'),h('span','edition-pager__current',current.displayDate),h('span','edition-pager__disabled',t.nextEdition));
+  main.appendChild(pager);
+
+  append(frag,main,footer());
+  return frag;
 }
 
 function archivePage() {
