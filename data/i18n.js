@@ -123,7 +123,16 @@ export const editionTranslations = {
         Brent:{reason:"Toda la narrativa de alivio se debilita si recupera rápidamente máximos recientes",status:"Gatillo macro"},
         "US 10Y":{reason:"Una nueva subida de tires presionaría a growth y cripto",status:"Control de riesgo"},
         "USD/JPY":{reason:"Cerca de 157 con riesgo de intervención tras la subida del BoJ",status:"Riesgo de evento"}
-      }
+      },
+      sources:[
+        {note:"STOXX 600, liderazgo sectorial y transmisión del alivio del petróleo. Publicado el 21 sep 2026."},
+        {note:"Renta variable asiática, USD/JPY y contexto del petróleo. Publicado el 21 sep 2026."},
+        {note:"Yuan, fixing del PBOC y contexto de la cumbre Trump–Xi. Publicado el 21 sep 2026."},
+        {note:"Subida de la Fed a 3,75%–4,00% y contexto hawkish del 17 sep 2026."},
+        {note:"Snapshot de BTC, ETH y SOL y contexto cross-asset de riesgo. Publicado el 21 sep 2026."},
+        {note:"Máximo de ocho meses de Bitcoin cerca de 85.117 $ y contexto de ETF/sentimiento. Publicado el 21 sep 2026."},
+        {note:"Snapshot de IBEX y Brent. Publicado el 21 sep 2026."}
+      ]
     }
   }
 };
