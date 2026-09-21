@@ -47,3 +47,25 @@ Prefer central banks, exchanges, CME/CFTC/SEC/EDGAR, official releases and major
 ## Archive contract
 
 Each edition should be stored under `editions/YYYY-MM-DD` and remain immutable after publication, except for a separate retrospective layer. Later outcome reviews must never rewrite the original thesis.
+
+## Bilingual publication contract
+
+Every edition must be published in **English and Spanish** from the same verified factual dataset.
+
+### Canonical data
+- English remains the canonical base object stored inside `data/latest.js`.
+- `data/i18n.js` stores the Spanish translation for the same edition under `editionTranslations.es[YYYY-MM-DD]`.
+- Both language versions must contain the same numbers, source URLs, scenario structure, thesis logic and invalidation criteria.
+- Translation must never introduce a claim that is absent from the canonical edition.
+
+### Required Spanish translation coverage
+For every new date translate:
+- `displayDate`, `label`, `headline`, `dek`
+- every item in `brief`
+- indicator `label` and `note` when language-specific
+- every story: `category`, `title`, `dek`, `analysis`, `watch`
+- every scenario: `name`, `thesis`, `conditions`, `watch`
+- every watchlist item: `reason`, `status`
+- source notes while preserving original source names and URLs
+
+The website language switch must always render an edition entirely in one language; avoid mixed English/Spanish prose except proper names, tickers and standard market abbreviations.
