@@ -120,36 +120,67 @@ function footer() {
   return f;
 }
 
+function splitMarketValue(value, note='') {
+  const dotParts=value.split('·').map(x=>x.trim()).filter(Boolean);
+  if(dotParts.length>=2) return {price:dotParts[0],change:dotParts.slice(1).join(' · ')};
+  if(value.includes('→')) {
+    const parts=value.split('→').map(x=>x.trim());
+    return {price:parts[parts.length-1],change:note.toLowerCase().includes('high')?(lang==='es'?'Máximo de 8 meses':'8-month high'):(lang==='es'?'Sesión alcista':'Session high')};
+  }
+  return {price:value,change:''};
+}
+
+function marketLogo(symbol) {
+  const wrap=h('span',`market-logo market-logo--${symbol.toLowerCase()}`);
+  if(symbol==='BTC') wrap.textContent='₿';
+  else if(symbol==='ETH') {
+    append(wrap,h('span','eth-diamond eth-diamond--top',''),h('span','eth-diamond eth-diamond--bottom',''));
+  } else if(symbol==='SOL') {
+    append(wrap,h('span','sol-bar',''),h('span','sol-bar',''),h('span','sol-bar',''));
+  } else if(symbol==='BRENT') wrap.textContent='●';
+  else if(symbol==='STOXX') wrap.textContent='EU';
+  else if(symbol==='IBEX') wrap.textContent='ES';
+  else wrap.textContent=symbol.slice(0,2);
+  return wrap;
+}
+
 function marketPulse(current = editionNow()) {
   const t=strings();
-  const priority=['BTC','BRENT','STOXX','DXY'];
+  const priority=['STOXX','IBEX','BTC','ETH','SOL','BRENT'];
   const items=priority.map(symbol=>current.indicators.find(i=>i.symbol===symbol)).filter(Boolean);
   const section=h('section','premium-section market-pulse');
   section.id='market-pulse';
 
   const head=h('div','premium-section__head');
   const titles=h('div','premium-section__titles');
-  append(titles,h('h2','premium-section__title',t.marketPulse),h('span','premium-section__eyebrow',t.marketPulseHint));
+  append(titles,h('h2','premium-section__title',t.marketPulse),h('span','premium-section__eyebrow',lang==='es'?'Mercados reales. Snapshot de la edición.':'Real markets. Edition snapshot.'));
   append(head,titles,link(t.viewAllData,withLang(`/edition/${current.date}#snapshot`),'section-link'));
   section.appendChild(head);
 
-  const grid=h('div','market-pulse__grid');
-  items.forEach((item,index)=>{
-    const cell=h('article',`market-pulse__item market-pulse__item--${item.state||'neutral'}`);
-    const icon=h('span','market-icon',item.symbol==='BTC'?'₿':item.symbol==='BRENT'?'●':item.symbol==='STOXX'?'▥':'$');
-    const top=h('div','market-pulse__identity');
-    const name=h('div','market-pulse__name');
-    append(name,h('strong','',item.symbol),h('span','',item.label));
-    append(top,icon,name);
-    append(cell,top,h('div','market-pulse__data'),h('div',`market-state-line market-state-line--${item.state||'neutral'}`));
-    const data=cell.querySelector('.market-pulse__data');
-    append(
-      data,
-      h('strong','market-pulse__value',item.value),
-      h('span','market-pulse__status',item.state==='positive'?'● '+(lang==='es'?'Favorable':'Positive'):item.state==='negative'?'● '+(lang==='es'?'Bajo presión':'Under pressure'):'● '+(lang==='es'?'Neutral':'Neutral')),
-      h('span','market-pulse__note',item.note)
-    );
-    grid.appendChild(cell);
+  const grid=h('div','market-cards');
+  items.forEach(item=>{
+    const parsed=splitMarketValue(item.value,item.note);
+    const card=link('',withLang(`/edition/${current.date}#snapshot`),`market-card market-card--${item.state||'neutral'}`);
+    const top=h('div','market-card__top');
+    const identity=h('div','market-card__identity');
+    append(identity,marketLogo(item.symbol),h('div','market-card__name'));
+    const name=identity.querySelector('.market-card__name');
+    append(name,h('strong','',item.label),h('span','',item.symbol));
+    append(top,identity,h('span','market-card__arrow','›'));
+
+    const quote=h('div','market-card__quote');
+    append(quote,h('strong','market-card__price',parsed.price),h('span','market-card__change',parsed.change));
+
+    const move=h('div','market-card__move');
+    const rail=h('div','market-card__rail');
+    rail.appendChild(h('span','market-card__rail-fill',''));
+    move.appendChild(rail);
+
+    const foot=h('div','market-card__foot');
+    append(foot,h('span','market-card__period','1D'),h('span','market-card__source',item.note));
+
+    append(card,top,quote,move,foot);
+    grid.appendChild(card);
   });
   section.appendChild(grid);
   return section;
@@ -245,6 +276,50 @@ function whaleRow(event) {
   return row;
 }
 
+function storyMedia(id) {
+  const map={
+    hero:{
+      src:'https://commons.wikimedia.org/wiki/Special:Redirect/file/NYSE%20facade.jpg?width=1800',
+      alt:lang==='es'?'Fachada de la Bolsa de Nueva York en Wall Street':'New York Stock Exchange facade on Wall Street',
+      credit:'NYSE · Wikimedia Commons',
+      href:'https://commons.wikimedia.org/wiki/File:NYSE_facade.jpg'
+    },
+    'oil-relief':{
+      src:'https://images.unsplash.com/photo-1759956214507-af3b18cf292f?auto=format&fit=crop&w=1200&q=82',
+      alt:lang==='es'?'Plataforma petrolífera marina':'Offshore oil platform',
+      credit:'Oil platform · Unsplash',
+      href:'https://unsplash.com/s/photos/offshore-oil-rig'
+    },
+    'crypto-breakout':{
+      src:'https://images.unsplash.com/photo-1671723421822-0044e89e4618?auto=format&fit=crop&w=1200&q=82',
+      alt:lang==='es'?'Moneda física de Bitcoin':'Physical Bitcoin coin',
+      credit:'Bitcoin · Unsplash',
+      href:'https://unsplash.com/photos/i-ExpRgiSYo'
+    },
+    'fed-ceiling':{
+      src:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Eccles%20Federal%20Reserve%20Board%20Building.jpg?width=1200',
+      alt:lang==='es'?'Edificio de la Reserva Federal en Washington':'Federal Reserve Board building in Washington',
+      credit:'Federal Reserve · Wikimedia Commons',
+      href:'https://commons.wikimedia.org/wiki/File:Eccles_Federal_Reserve_Board_Building.jpg'
+    }
+  };
+  return map[id]||map.hero;
+}
+
+function mediaFigure(meta,className) {
+  const figure=h('figure',className);
+  const img=h('img',className+'__img');
+  img.src=meta.src;
+  img.alt=meta.alt;
+  img.loading=className.includes('hero')?'eager':'lazy';
+  img.decoding='async';
+  const cap=link(meta.credit,meta.href,className+'__credit');
+  cap.target='_blank';
+  cap.rel='noreferrer';
+  append(figure,img,cap);
+  return figure;
+}
+
 function home() {
   const t=strings();
   const current=editionNow();
@@ -278,7 +353,7 @@ function home() {
   });
   copy.appendChild(notes);
 
-  const visual=h('div','premium-hero__visual');
+  const visual=mediaFigure(storyMedia('hero'),'premium-hero__visual');
   const visualCopy=h('div','premium-hero__visual-copy');
   append(visualCopy,h('div','premium-hero__visual-title',t.premiumPromise),h('div','premium-hero__visual-rule',''),h('p','premium-hero__visual-caption',t.disciplineLine));
   visual.appendChild(visualCopy);
@@ -301,7 +376,8 @@ function home() {
     const story=current.stories.find(s=>s.id===id);
     if(!story)return;
     const card=link('',withLang(`/edition/${current.date}#${story.id}`),'premium-story');
-    const visual=h('div',`premium-story__visual premium-story__visual--${story.id}`);
+    const media=storyMedia(story.id);
+    const visual=mediaFigure(media,`premium-story__visual premium-story__visual--${story.id}`);
     append(visual,h('span','premium-story__rank',String(index+1)));
     const body=h('div','premium-story__body');
     append(
