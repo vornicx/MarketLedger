@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Market Ledger monogram</title><desc id="desc">ML monogram in an editorial square.</desc>
+  <rect width="128" height="128" fill="#171513"/>
+  <path d="M21 93V35h13l18 33 18-33h13v58H71V55L56 82h-8L33 55v38H21Z" fill="#f2e7d8"/>
+  <path d="M91 35h13v47h23v11H91V35Z" fill="#a83a35"/>
+</svg>
