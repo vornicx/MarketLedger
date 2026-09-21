@@ -77,3 +77,30 @@ The homepage is a **cover**, not the entire report.
 - Whale Watch should stay visually quiet unless a verified event actually deserves attention.
 - The complete analysis, all stories, sources and full scenario detail live inside `/edition/YYYY-MM-DD`.
 - When choosing between adding more content to the homepage and linking into the edition, prefer the link.
+
+
+## UX comprehension rules
+
+Market Ledger must be understandable before it is exhaustive.
+
+### First-screen test
+Within roughly ten seconds, a reader should be able to answer:
+1. What is happening?
+2. Why does it matter?
+3. What could change the current reading?
+4. Where do I go for the full analysis?
+
+### Information architecture
+- Main navigation should stay short: Today, Ideas, Whales, Scorecard, Archive.
+- Do not place Macro, Markets and Crypto as competing top-level navigation when they are sections of the same daily edition.
+- The homepage uses a 60-second summary, a four-variable Market Pulse, three key stories, scenarios and a watchlist.
+- Long-form analysis belongs in the dated edition.
+- The full edition must provide an in-page jump navigation: Overview, Snapshot, Analysis, Scenarios, Sources.
+
+### Comprehension patterns
+- Important stories explicitly separate **Why it matters**, **What it means** and **Watch**.
+- Watchlists use visible column meaning: Asset, Trigger, Current stance.
+- Scenario cards should make confirmation conditions obvious and avoid paragraph-heavy presentation.
+- Secondary modules must look secondary. Whale Watch and Research should not compete visually with the daily market read unless new evidence makes them important.
+- Prefer short explanatory labels over finance jargon when both communicate the same thing.
+- Never duplicate the same market data in a ticker and a snapshot on the same page.
