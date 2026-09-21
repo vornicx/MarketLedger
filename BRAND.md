@@ -1,106 +1,155 @@
 # Market Ledger — Brand System
 
-## Positioning
+## Brand idea
 
-**Market Ledger** is a personal financial newspaper and market-intelligence journal. It should feel editorial, sober and evidence-led — closer to a serious printed financial publication than to a trading dashboard or an AI SaaS product.
+**Market Ledger** is a premium financial publication for readers who want context before conviction.
 
-**Tagline:** `Intelligence, without the noise.`
+It should feel closer to a privately printed market journal, an investment house research note and a high-end editorial magazine than to a trading dashboard.
+
+**Primary line:** `Intelligence, without the noise.`  
+**Editorial strapline:** `Ideas for a more certain tomorrow.`
+
+## Brand principles
+
+1. **Clarity** — complex subjects, clearly expressed.
+2. **Depth** — go beyond the surface.
+3. **Calm authority** — confident, never loud.
+4. **Signal over noise** — everything on screen must earn its place.
+5. **Context before conviction** — facts, interpretation and scenarios stay distinct.
 
 ## Identity
 
-- Primary wordmark: `MARKET LEDGER`
+### Primary lockup
 - Monogram: `ML`
-- Signature device: black editorial square with a small oxblood corner mark
-- Paper: `#f2e7d8`
-- Ink: `#171513`
-- Oxblood accent: `#8f2f2d`
-- Muted ink: `#655e56`
-- Positive green: `#25533f`
+- Wordmark: `MARKET LEDGER`
+- Strapline underneath in spaced uppercase.
+- The monogram is typographic, not a generic app icon.
+
+### Palette
+- **Paper Ivory:** `#F7F2E9`
+- **Paper White:** `#FBF8F2`
+- **Ink:** `#161513`
+- **Soft Ink:** `#3D3832`
+- **Brass:** `#AD8750`
+- **Oxblood:** `#701C1D`
+- **Deep Oxblood:** `#531314`
+- **Constructive Green:** `#416C52`
+- **Risk Red:** `#9B403B`
+
+Oxblood is reserved for decisive editorial actions and emphasis. Brass is the quiet signature color.
 
 ## Typography
 
-- Display/editorial: Iowan Old Style / Baskerville / Georgia / Times fallback
-- Utility/data/navigation: Inter / system sans
-- Headlines should be tight, large and deliberately newspaper-like.
-- Avoid generic rounded SaaS cards, glassmorphism, neon crypto aesthetics and oversized gradients.
+### Display
+Use a high-contrast editorial serif stack:
+`Bodoni 72, Didot, Iowan Old Style, Baskerville, Georgia, Times New Roman`
 
-## Mobile rules
+Use for:
+- masthead
+- headlines
+- major numbers
+- article titles
+- branded statements
 
-Mobile is designed as its own reading experience, not a compressed desktop page:
+### Interface
+Use a clean system sans stack:
+`Inter, ui-sans-serif, -apple-system, Segoe UI, sans-serif`
 
-- Compact monogram + wordmark masthead
-- Horizontally scrollable primary navigation
-- Dark market tape for quick scanning
-- Large editorial lead headline with reduced line length
-- One-column stories and scenarios
-- Clear rules between sections instead of boxed cards
-- Watchlists and sources collapse into readable semantic rows
-- No horizontal overflow except deliberate nav/ticker scrolling
-- Respect `prefers-reduced-motion`
+Use for:
+- navigation
+- labels
+- data notes
+- metadata
+- controls
+- timestamps
 
-## Editorial voice
+## Layout language
 
-Calm, analytical and falsifiable. Separate observed facts from interpretation. Do not manufacture certainty, urgency or trade signals. Prefer conditions, catalysts, risks and invalidation criteria.
+Market Ledger should feel **composed**, not card-generated.
 
-## Editorial lightness
+- Large editorial hero with one dominant narrative.
+- Photography may carry branded statements, but never decorative marketing copy.
+- Thin rules instead of heavy containers.
+- Modular financial data sits on quiet ivory panels.
+- Story cards combine imagery, a clear rank, category and a concise editorial takeaway.
+- Scenario modules use restrained directional iconography.
+- Avoid glassmorphism, neon finance aesthetics, oversized gradients and generic SaaS pills.
+- Corners remain mostly square or subtly softened (2–4px).
 
-The interface should feel **edited**, not merely dense.
+## Homepage architecture
 
-- Prefer whitespace and hierarchy over repeated borders.
-- Use one strong headline at a time; secondary stories should step down clearly.
-- Reading columns should stay around 760–860px for long prose.
-- Market data should be scannable but visually quieter than editorial analysis.
-- Use thin rules and subtle paper contrast rather than heavy boxes.
-- Avoid presenting every section with equal visual weight.
-- Scenario, watchlist and archive modules should feel like supporting editorial furniture.
-- Mobile should preserve rhythm and whitespace rather than compress density.
+The homepage is a **front page**, not the complete report.
+
+1. Premium masthead
+2. Lead story + editorial visual
+3. In 60 seconds
+4. Market Pulse
+5. What matters today
+6. Market scenarios
+7. Watchlist / Whale Watch / Research Ideas
+
+The full analysis remains in the dated edition.
+
+## First-screen rule
+
+Within roughly ten seconds a reader should understand:
+- what changed;
+- how markets reacted;
+- what matters next;
+- where to read the complete reasoning.
+
+## Daily content contract
+
+The first three `brief` entries always represent:
+1. What changed
+2. How markets reacted
+3. What could change the picture
+
+The homepage Market Pulse expects these symbols when data is available:
+- `BTC`
+- `BRENT`
+- `STOXX`
+- `DXY`
+
+Each story must include:
+- `dek` = why it matters;
+- `analysis` = what it means;
+- `watch` = what to watch next.
+
+## Mobile
+
+Mobile is not a compressed desktop layout.
+
+- Brand lockup remains visible.
+- Primary navigation becomes a horizontal editorial rail.
+- Hero becomes stacked: editorial copy first, photography second.
+- The three summary cards become a clear vertical sequence.
+- Market Pulse uses a 2×2 grid.
+- Stories become image + headline rows.
+- Scenarios and lower modules stack one at a time.
+- No accidental horizontal overflow.
+
+## Motion
+
+Motion should be subtle and purposeful:
+- 150–220ms hover transitions;
+- minimal vertical lift on editorial cards;
+- no bouncing, floating or decorative looping animation;
+- respect `prefers-reduced-motion`.
 
 ## Languages
 
-Market Ledger is bilingual: **English and Spanish**.
+Market Ledger is bilingual: English and Spanish.
 
-- The language control must be visible in the masthead as `ES / EN`.
-- It changes navigation, interface labels and the complete editorial content.
-- Preference is persisted locally and can also be represented by the `?lang=es|en` query parameter.
-- New daily editions must be generated in both languages at publication time.
-- There is one canonical archive and one set of market facts; translations must never diverge on numbers, dates, sources, scenarios or thesis logic.
+- The masthead exposes `EN / ES`.
+- The choice persists locally and via `?lang=en|es`.
+- Both versions use the same factual dataset, sources, numbers, scenarios and thesis logic.
+- Translation must sound native, not mechanically literal.
 
+## Editorial voice
 
-## Front page vs. full edition
+Calm, analytical, precise and falsifiable.
 
-The homepage is a **cover**, not the entire report.
+Never manufacture urgency. Never confuse a scenario with a fact. Never make a transfer look like a trade without evidence.
 
-- Show one dominant cover story, two supporting stories and a concise index of the rest.
-- Keep the three-point Daily Brief near the top.
-- Use compact scenarios on the cover; reserve full conditions and watch items for the dated edition.
-- Show only the highest-value watchlist items on the cover.
-- Whale Watch should stay visually quiet unless a verified event actually deserves attention.
-- The complete analysis, all stories, sources and full scenario detail live inside `/edition/YYYY-MM-DD`.
-- When choosing between adding more content to the homepage and linking into the edition, prefer the link.
-
-
-## UX comprehension rules
-
-Market Ledger must be understandable before it is exhaustive.
-
-### First-screen test
-Within roughly ten seconds, a reader should be able to answer:
-1. What is happening?
-2. Why does it matter?
-3. What could change the current reading?
-4. Where do I go for the full analysis?
-
-### Information architecture
-- Main navigation should stay short: Today, Ideas, Whales, Scorecard, Archive.
-- Do not place Macro, Markets and Crypto as competing top-level navigation when they are sections of the same daily edition.
-- The homepage uses a 60-second summary, a four-variable Market Pulse, three key stories, scenarios and a watchlist.
-- Long-form analysis belongs in the dated edition.
-- The full edition must provide an in-page jump navigation: Overview, Snapshot, Analysis, Scenarios, Sources.
-
-### Comprehension patterns
-- Important stories explicitly separate **Why it matters**, **What it means** and **Watch**.
-- Watchlists use visible column meaning: Asset, Trigger, Current stance.
-- Scenario cards should make confirmation conditions obvious and avoid paragraph-heavy presentation.
-- Secondary modules must look secondary. Whale Watch and Research should not compete visually with the daily market read unless new evidence makes them important.
-- Prefer short explanatory labels over finance jargon when both communicate the same thing.
-- Never duplicate the same market data in a ticker and a snapshot on the same page.
+**Same markets. A higher standard.**
