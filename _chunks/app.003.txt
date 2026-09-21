@@ -1,0 +1,78 @@
+    main.appendChild(rule('Thesis'));
+    main.appendChild(h('p', 'research-prose research-prose--lead', item.thesis));
+    const cases = h('section', 'case-grid');
+    [['Bull case', item.bullCase], ['Base case', item.baseCase], ['Bear case', item.bearCase]].forEach(([title, text]) => {
+        const card = h('article', 'case-card');
+        append(card, h('div', 'case-card__label', title), h('p', '', text));
+        cases.appendChild(card);
+    });
+    main.appendChild(cases);
+    main.appendChild(rule('Catalysts & Risks'));
+    const lists = h('section', 'dual-list');
+    const buildList = (title, items) => { const x = h('div', 'dual-list__col'); x.appendChild(h('h2', 'dual-list__title', title)); const ul = h('ul', 'editorial-list'); items.forEach(v => ul.appendChild(h('li', '', v))); x.appendChild(ul); return x; };
+    append(lists, buildList('Catalysts', item.catalysts), buildList('Risks', item.risks));
+    main.appendChild(lists);
+    main.appendChild(rule('What would change our mind'));
+    const ul = h('ol', 'change-list');
+    item.changeMind.forEach(v => ul.appendChild(h('li', '', v)));
+    main.appendChild(ul);
+    main.appendChild(rule('Revision history'));
+    main.appendChild(h('p', 'empty-state', 'First version. Future reviews will be appended here without rewriting the original thesis.'));
+    append(frag, main, footer());
+    return frag;
+}
+function scorecardPage() {
+    setPageMeta('Market Ledger — Scorecard', 'Track thesis outcomes and retrospective evidence over time.');
+    const frag = document.createDocumentFragment();
+    append(frag, masthead('Scorecard'));
+    const main = h('main', 'shell page');
+    append(main, h('div', 'kicker', 'THESIS SCORECARD'), h('h1', 'page-title', 'Evidence over ego.'), h('p', 'page-dek', 'The scorecard does not reward confident language. It records what was claimed, the review horizon, the realised evidence and whether the thesis was supported, invalidated or remained inconclusive.'));
+    const stats = h('section', 'score-stats');
+    const metrics = [['Theses tracked', String(thesisReviews.length)], ['Supported', '0'], ['Invalidated', '0'], ['Inconclusive', '0']];
+    metrics.forEach(([k, v]) => { const x = h('div', 'score-stat'); append(x, h('div', 'score-stat__value', v), h('div', 'score-stat__label', k)); stats.appendChild(x); });
+    main.appendChild(stats);
+    main.appendChild(h('p', 'demo-disclaimer', 'Demo scorecard — no historical performance is claimed yet.'));
+    main.appendChild(rule('Open reviews'));
+    const table = h('div', 'score-table');
+    thesisReviews.forEach(t => {
+        const row = h('article', 'score-row');
+        append(row, h('div', 'score-row__date', t.date), h('div', 'score-row__category', t.category), h('div', 'score-row__body'), badge(t.outcome, t.outcome === 'Invalidated' ? 'negative' : t.outcome === 'Supported' ? 'positive' : 'muted'));
+        const body = row.querySelector('.score-row__body');
+        append(body, h('h3', 'score-row__thesis', t.thesis), h('p', 'score-row__evidence', t.evidence), h('div', 'score-row__horizon', `Review horizon: ${t.horizon}`));
+        table.appendChild(row);
+    });
+    main.appendChild(table);
+    append(frag, main, footer());
+    return frag;
+}
+function whalesPage() {
+    setPageMeta('Market Ledger — Whale Watch', 'Tracked wallet activity journal with evidence-based classification.');
+    const frag = document.createDocumentFragment();
+    append(frag, masthead('Whales'));
+    const main = h('main', 'shell page');
+    append(main, h('div', 'kicker', 'ON-CHAIN JOURNAL'), h('h1', 'page-title', 'Wallet moves, with context.'), h('p', 'page-dek', 'Whale Watch records activity from tracked wallets, but a transaction only becomes useful when counterparties, repetition and market context support the same interpretation.'));
+    const filters = h('div', 'filter-row');
+    const chain = h('select', 'filter-select');
+    ['All chains', 'Solana', 'Ethereum', 'Base'].forEach(v => { const o = h('option', '', v); o.value = v === 'All chains' ? '' : v; chain.appendChild(o); });
+    const klass = h('select', 'filter-select');
+    ['All classifications', 'Noise', 'Interesting', 'High conviction'].forEach(v => { const o = h('option', '', v); o.value = v === 'All classifications' ? '' : v; klass.appendChild(o); });
+    append(filters, chain, klass);
+    main.appendChild(filters);
+    main.appendChild(rule('Tracked events'));
+    const list = h('section', 'whale-list');
+    const render = () => {
+        while (list.firstChild)
+            list.removeChild(list.firstChild);
+        const filtered = whaleEvents.filter(w => (!chain.value || w.chain === chain.value) && (!klass.value || w.classification === klass.value));
+        if (!filtered.length) {
+            list.appendChild(h('p', 'empty-state', 'No events match those filters.'));
+            return;
+        }
+        filtered.forEach(w => list.appendChild(whaleRow(w)));
+    };
+    chain.addEventListener('change', render);
+    klass.addEventListener('change', render);
+    render();
+    main.appendChild(list);
+    main.appendChild(rule('Method'));
+    const method = h('section', 'method-grid');
