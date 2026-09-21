@@ -150,3 +150,6 @@ export const thesisTranslations = {
     t2:{category:"Macro",thesis:"Si Brent permanece cerca de la zona baja de 100 $ y las tires siguen contenidas, tecnología y cripto deberían conservar parte del impulso de alivio de hoy.",horizon:"5 días",outcome:"Abierta",evidence:"Tesis cross-asset inicial basada en la cadena petróleo → inflación → tires → duración."}
   }
 };
+
+
+export const whaleEventTranslations = { es: {} };
