@@ -1,0 +1,43 @@
+            analysis: 'South Korea’s tech-heavy index rose roughly 1.4%–1.5%, Taiwan gained around 1% and Chinese blue chips were positive while Japan was closed for Silver Week. Europe then extended the pattern, led by technology and banks. This geographic breadth improves the quality of today’s signal, although holiday-thinned Japanese trading and the upcoming Trump–Xi summit mean positioning can still shift quickly.',
+            watch: 'Trump–Xi headlines, semiconductor trade policy and whether the yuan’s strength persists after the summit.'
+        },
+        {
+            id: 'china-fx', category: 'Macro', title: 'The yuan is quietly sending a stability signal ahead of Trump–Xi',
+            dek: 'The yuan reached a fresh multi-year high as the PBOC eased resistance to appreciation before this week’s summit.',
+            analysis: 'Reuters reported the onshore yuan around 6.695 per dollar, its strongest in more than three and a half years. The PBOC set its midpoint at the strongest level since February 2023. That looks less like a new structural appreciation regime and more like an effort to enter the summit with stable financial conditions. Still, a calmer currency backdrop reduces one source of global risk and supports Asian assets at the margin.',
+            watch: 'Whether the fixing remains supportive after the summit and whether US–China discussions produce concrete trade or AI outcomes.'
+        },
+        {
+            id: 'crypto-breakout', category: 'Crypto', title: 'Bitcoin is breaking higher — but part of the move is a short squeeze',
+            dek: 'BTC moved from above $82,000 to an eight-month high around $85,100 as oil fell, ETF demand improved and short positions were forced out.',
+            analysis: 'The move is strong enough to respect, but its composition matters. CoinDesk showed BTC above $82,000 alongside broad crypto gains; later reporting put Bitcoin above $85,000. Separate liquidation data cited by market coverage showed hundreds of millions of dollars of short liquidations, which means some acceleration came from forced buying rather than fresh discretionary spot demand. Ether and Solana also advanced, confirming breadth. The next test is whether price can hold after the squeeze impulse fades.',
+            watch: 'Spot ETF flows, spot-versus-perpetual volume, funding, open interest rebuilding and whether BTC can hold above the prior $80k resistance zone.'
+        },
+        {
+            id: 'alt-beta', category: 'Crypto', title: 'SOL is participating, but BTC remains the cleaner macro barometer',
+            dek: 'Solana is up with the market, yet the current catalyst is macro liquidity rather than a Solana-specific fundamental break.',
+            analysis: 'SOL traded around $111.83 in a CoinDesk snapshot, up roughly 2.9%, while broader reports showed larger intraday gains as the crypto rally accelerated. For now, the move should be interpreted as high-beta participation in improving risk appetite. A higher-conviction SOL thesis would need confirmation from network activity, stablecoin growth and the tracked-wallet cluster rather than price alone.',
+            watch: 'SOL/BTC relative strength, DEX activity quality, stablecoin flows and coordinated accumulation among tracked wallets.'
+        },
+        {
+            id: 'onchain-discipline', category: 'On-chain', title: 'No wallet move enters the ledger without context',
+            dek: 'The hourly wallet monitor is active separately; the daily edition only promotes events that survive a higher evidence threshold.',
+            analysis: 'A raw transfer is not a trade. Market Ledger will only publish a whale event when we can classify the destination, size it relative to the wallet, compare it with historical behaviour and, ideally, see confirmation across unrelated wallets or market liquidity. That prevents the journal from turning into a stream of noisy transaction alerts.',
+            watch: 'Clusters of same-token accumulation, fresh DEX buys by historically profitable wallets and exchange inflow/outflow patterns that repeat.'
+        }
+    ],
+    scenarios: [
+        {
+            id: 'risk-on', name: 'Relief becomes a broader risk-on move', tone: 'constructive',
+            thesis: 'Lower oil continues to ease inflation pressure, yields remain contained and today’s tech/crypto strength broadens rather than fading after the opening impulse.',
+            conditions: ['Brent holds near/below the low-$100s', 'US yields do not re-accelerate', 'Nasdaq cash breadth confirms futures', 'BTC holds above the prior $80k breakout area'],
+            watch: ['Brent', 'US 10Y / real yields', 'Nasdaq breadth', 'BTC spot demand and ETF flows']
+        },
+        {
+            id: 'base', name: 'Relief rally, then digestion', tone: 'neutral',
+            thesis: 'Markets keep today’s gains but remain range-bound as investors balance lower oil against a still-hawkish Fed and upcoming Trump–Xi event risk.',
+            conditions: ['Oil stabilises rather than collapses', 'Dollar remains firm but not surging', 'Equity leadership rotates', 'Crypto funding stays controlled'],
+            watch: ['DXY', '2Y yield', 'Trump–Xi headlines', 'Crypto funding/open interest']
+        },
+        {
+            id: 'risk-off', name: 'Macro pressure returns', tone: 'defensive',
