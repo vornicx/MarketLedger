@@ -301,6 +301,18 @@ function storyMedia(id) {
       alt:lang==='es'?'Edificio de la Reserva Federal en Washington':'Federal Reserve Board building in Washington',
       credit:'Federal Reserve · Wikimedia Commons',
       href:'https://commons.wikimedia.org/wiki/File:Eccles_Federal_Reserve_Board_Building.jpg'
+    },
+    'equities-tech':{
+      src:'https://unsplash.com/photos/QASO5vwgVco/download?force=true&w=1200',
+      alt:lang==='es'?'Ingeniero trabajando en una cleanroom de semiconductores':'Engineer working in a semiconductor cleanroom',
+      credit:'Semiconductor cleanroom · Unsplash',
+      href:'https://unsplash.com/photos/man-using-computer-QASO5vwgVco'
+    },
+    'europe-asia':{
+      src:'https://unsplash.com/photos/EuIqk6LpUU0/download?force=true&w=1200',
+      alt:lang==='es'?'Pantalla con datos del mercado bursátil':'Financial stock market data on screen',
+      credit:'Market data · Unsplash',
+      href:'https://unsplash.com/photos/financial-stock-market-data-displayed-on-a-screen-EuIqk6LpUU0'
     }
   };
   return map[id]||map.hero;
@@ -308,13 +320,13 @@ function storyMedia(id) {
 
 function mediaFigure(meta,className) {
   const figure=h('figure',className);
-  const isHero=className.includes('premium-hero__visual');
-  const img=h('img',isHero?'premium-hero__visual__img':'premium-story__visual__img');
+  const base=className.split(' ')[0];
+  const img=h('img',base+'__img');
   img.src=meta.src;
   img.alt=meta.alt;
-  img.loading=isHero?'eager':'lazy';
+  img.loading=base==='lead-media'?'eager':'lazy';
   img.decoding='async';
-  const cap=link(meta.credit,meta.href,isHero?'premium-hero__visual__credit':'premium-story__visual__credit');
+  const cap=link(meta.credit,meta.href,base+'__credit');
   cap.target='_blank';
   cap.rel='noreferrer';
   append(figure,img,cap);
