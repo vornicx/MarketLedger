@@ -374,6 +374,7 @@ function home() {
 
   const main=h('main','shell social-home');
   main.appendChild(marketTape(current));
+  const frontStage=h('section','front-stage');
 
   // Edition intro: compact, readable and obvious.
   const intro=h('section','edition-intro');
@@ -389,11 +390,12 @@ function home() {
   const actions=h('div','edition-intro__actions');
   append(actions,link(t.readEdition,withLang(`/edition/${current.date}`),'primary-action'),link(t.briefing,withLang('#overview'),'secondary-action'));
   intro.appendChild(actions);
-  main.appendChild(intro);
+  frontStage.appendChild(intro);
 
-  // Lead image behaves like a social/editorial media card.
+  // The front stage pairs the lead visual with the edition thesis instead of stacking competing hero blocks.
   const leadMedia=mediaFigure(storyMedia('hero'),'lead-media');
-  main.appendChild(leadMedia);
+  frontStage.prepend(leadMedia);
+  main.appendChild(frontStage);
   main.appendChild(latestStrip(current));
 
   // Market cards: clear, horizontally scannable.
