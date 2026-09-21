@@ -1,0 +1,45 @@
+            thesis: 'A renewed oil shock, hotter inflation signal or hawkish repricing pushes yields and the dollar higher, reversing the relief trade in high-beta assets.',
+            conditions: ['Brent rebounds sharply', 'US yields break higher', 'Dollar strengthens', 'BTC loses the $80k area with leverage still elevated'],
+            watch: ['Middle East supply headlines', 'Fed repricing', 'Credit spreads', 'Crypto liquidations']
+        }
+    ],
+    watchlist: [
+        { asset: 'BTC', reason: 'Hold above the former $80k resistance zone after the short-squeeze impulse', status: 'Constructive, wait for hold' },
+        { asset: 'SOL', reason: 'Need SOL/BTC strength plus on-chain/stablecoin confirmation', status: 'Study, do not chase' },
+        { asset: 'Nasdaq', reason: 'Cash-session breadth must confirm strong futures and AI leadership', status: 'Confirmation needed' },
+        { asset: 'Brent', reason: 'The entire relief narrative weakens if crude rapidly retakes recent highs', status: 'Macro trigger' },
+        { asset: 'US 10Y', reason: 'A renewed yield spike would pressure growth equities and crypto', status: 'Risk control' },
+        { asset: 'USD/JPY', reason: 'Near 157 with intervention risk after the BoJ hike', status: 'Event risk' }
+    ],
+    sources: [
+        { label: 'Reuters · Europe', note: 'STOXX 600, sector leadership and oil-relief transmission. Published 21 Sep 2026.', href: 'https://www.reuters.com/markets/europe/europes-stoxx-600-gains-tech-rallies-oil-retreat-eases-nerves-2026-09-21/' },
+        { label: 'Reuters · Asia', note: 'Asian equities, USD/JPY and oil backdrop. Published 21 Sep 2026.', href: 'https://in.marketscreener.com/news/tech-lifts-share-markets-in-asia-as-oil-slips-ce785adbd88ff227' },
+        { label: 'Reuters · FX', note: 'Yuan, PBOC fixing and Trump–Xi summit context. Published 21 Sep 2026.', href: 'https://www.reuters.com/world/asia-pacific/yuan-hits-fresh-multi-year-peak-pboc-eases-curb-ahead-trump-xi-summit-2026-09-21/' },
+        { label: 'Reuters · Fed context', note: 'Fed hike to 3.75%–4.00% and hawkish policy backdrop from 17 Sep 2026.', href: 'https://www.reuters.com/commentary/reuters-open-interest/global-markets-view-usa-2026-09-17/' },
+        { label: 'CoinDesk · Crypto', note: 'BTC, ETH and SOL snapshot plus cross-asset risk context. Published 21 Sep 2026.', href: 'https://www.coindesk.com/business/2026/09/21/live-updates-bitcoin-rises-above-usd82-000-as-falling-oil-lifts-risk-assets' },
+        { label: 'WSJ · Bitcoin', note: 'Bitcoin eight-month high near $85,117 and ETF/risk-sentiment context. Published 21 Sep 2026.', href: 'https://www.wsj.com/finance/currencies/bitcoin-jumps-above-85-000-to-8-month-high-050f3578' },
+        { label: 'Cinco Días · Spain', note: 'IBEX near 19,700 and Brent near $101 snapshot. Published 21 Sep 2026.', href: 'https://cincodias.elpais.com/mercados-financieros/2026-09-21/la-bolsa-y-el-ibex-35.html' }
+    ]
+};
+export const editions = [edition];
+// The hourly Solana wallet watcher is active separately. Only events that clear the
+// evidence threshold are promoted into a daily Market Ledger edition.
+export const whaleEvents = [];
+export const ideas = [
+    {
+        slug: 'solana-liquidity', asset: 'SOL', title: 'Solana as a liquidity and activity barometer', status: 'Researching', lastReviewed: '2026-09-21',
+        summary: 'Use Solana not only as a directional asset thesis but as a high-frequency window into speculative liquidity, wallet clustering and risk appetite.',
+        thesis: 'If network activity, stablecoin liquidity and spot-led demand expand together while leverage remains controlled, SOL can become a useful proxy for improving crypto risk appetite.',
+        bullCase: 'Sustained real usage, stablecoin growth and broad on-chain participation coincide with improving spot demand and manageable leverage.',
+        baseCase: 'Activity stays healthy but valuation and positioning limit upside, leaving SOL useful mainly as a liquidity signal rather than a high-conviction allocation.',
+        bearCase: 'Activity quality deteriorates, leverage dominates price action or network economics fail to justify valuation.',
+        catalysts: ['Stablecoin supply growth', 'DEX activity quality', 'Developer / application traction', 'Spot-led breakout versus BTC'],
+        risks: ['Leverage-driven false breakouts', 'Memecoin activity masking weak fundamentals', 'Network concentration', 'Regulatory or exchange shocks'],
+        changeMind: ['Persistent activity decline despite higher token price', 'Repeated exchange inflows from tracked long-term wallets', 'Funding and open interest become structurally overheated']
+    },
+    {
+        slug: 'asml-semiconductor-cycle', asset: 'ASML', title: 'ASML and the durability of the semiconductor capex cycle', status: 'Watching', lastReviewed: '2026-09-21',
+        summary: 'Track whether AI-led capital expenditure broadens into a durable semiconductor equipment cycle or becomes concentrated in a narrower set of customers.',
+        thesis: 'ASML remains structurally advantaged if advanced-node demand and customer capex stay resilient enough to offset cyclicality and export constraints.',
+        bullCase: 'Leading-edge demand broadens, bookings recover and customer capex remains disciplined but strong.',
+        baseCase: 'Long-term positioning stays intact while near-term order volatility creates uneven periods of growth.',
