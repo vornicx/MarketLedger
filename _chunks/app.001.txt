@@ -1,0 +1,85 @@
+        append(block, h('span', 'drop-index', `0${i + 1}`), h('p', '', p));
+        note.appendChild(block);
+    });
+    main.appendChild(note);
+    main.appendChild(rule('World & Macro'));
+    const macro = h('section', 'story-grid story-grid--two');
+    macro.id = 'macro';
+    edition.stories.filter(s => s.category === 'Macro' || s.category === 'Markets').forEach(s => macro.appendChild(storyCard(s)));
+    main.appendChild(macro);
+    main.appendChild(rule('Markets & Crypto'));
+    const markets = h('section', 'story-grid story-grid--two');
+    markets.id = 'markets';
+    edition.stories.filter(s => s.category === 'Crypto' || s.category === 'On-chain').forEach(s => markets.appendChild(storyCard(s)));
+    main.appendChild(markets);
+    main.appendChild(rule("Today's Playbook"));
+    const scenarios = h('section', 'scenario-grid');
+    edition.scenarios.forEach(s => scenarios.appendChild(scenarioCard(s)));
+    main.appendChild(scenarios);
+    main.appendChild(rule('Whale Watch'));
+    const cryptoSection = h('section', 'split-panel');
+    cryptoSection.id = 'crypto';
+    const whaleCol = h('div', 'split-panel__main');
+    whaleCol.appendChild(h('p', 'section-intro', 'The hourly tracker is active. Only verified, context-rich wallet activity is promoted into the daily edition.'));
+    if (whaleEvents.length)
+        whaleEvents.forEach(w => whaleCol.appendChild(whaleRow(w)));
+    else
+        whaleCol.appendChild(h('div', 'whale-empty', 'No high-confidence wallet event has cleared the publication threshold in this edition.'));
+    const explainer = h('aside', 'editorial-aside');
+    append(explainer, h('div', 'aside-rule', 'CLASSIFICATION RULE'), h('h3', 'editorial-aside__title', 'Context before conviction'), h('p', '', 'A large transfer can mean custody, collateral, exchange inventory or an actual position. Market Ledger only upgrades an event when destination, repetition and related-wallet behaviour support the same interpretation.'), link('Open the wallet journal →', '/whales', 'text-link'));
+    append(cryptoSection, whaleCol, explainer);
+    main.appendChild(cryptoSection);
+    main.appendChild(rule("What We're Watching"));
+    const watch = h('section', 'watchlist');
+    edition.watchlist.forEach(item => {
+        const row = h('div', 'watchlist__row');
+        append(row, h('div', 'watchlist__asset', item.asset), h('div', 'watchlist__reason', item.reason), h('div', 'watchlist__status', item.status));
+        watch.appendChild(row);
+    });
+    main.appendChild(watch);
+    main.appendChild(rule('Research Ideas'));
+    const ideasGrid = h('section', 'ideas-grid');
+    ideas.forEach(item => {
+        const a = link('', `/ideas/${item.slug}`, 'idea-card');
+        append(a, h('div', 'idea-card__asset', item.asset), h('h3', 'idea-card__title', item.title), h('p', 'idea-card__summary', item.summary), h('div', 'idea-card__meta', `${item.status} · Reviewed ${item.lastReviewed}`));
+        ideasGrid.appendChild(a);
+    });
+    main.appendChild(ideasGrid);
+    const close = h('section', 'closing-note');
+    append(close, h('div', 'kicker', 'WHY THE ARCHIVE MATTERS'), h('h2', 'closing-note__title', 'The point is not to sound right today. It is to learn whether the framework was right later.'), h('p', '', 'Every daily edition will eventually receive a retrospective layer: what happened next, which assumptions held, what failed, and whether the original thesis should be updated.'), link('Browse the archive →', '/archive', 'text-link text-link--large'));
+    main.appendChild(close);
+    append(frag, main, footer());
+    return frag;
+}
+function editionPage(date) {
+    const current = editions.find(e => e.date === date);
+    if (!current)
+        return notFound(`No edition exists for ${date}.`);
+    setPageMeta(`Market Ledger — ${current.displayDate}`, current.dek);
+    const frag = document.createDocumentFragment();
+    append(frag, masthead('Today'), ticker());
+    const main = h('main', 'shell edition-page');
+    const head = h('header', 'edition-head');
+    append(head, h('div', 'kicker', `${current.label} · DAILY EDITION`), h('h1', 'edition-head__title', current.headline), h('p', 'edition-head__dek', current.dek), h('div', 'edition-head__meta', current.displayDate));
+    main.appendChild(head);
+    main.appendChild(rule('Daily Brief'));
+    current.brief.forEach(p => main.appendChild(h('p', 'edition-prose', p)));
+    main.appendChild(rule('Market Snapshot'));
+    const snapshot = h('section', 'snapshot-grid');
+    current.indicators.forEach(i => {
+        const cell = h('div', 'snapshot-cell');
+        append(cell, h('div', 'snapshot-cell__symbol', i.symbol), h('div', 'snapshot-cell__label', i.label), h('div', 'snapshot-cell__value', i.value), h('div', 'snapshot-cell__note', i.note));
+        snapshot.appendChild(cell);
+    });
+    main.appendChild(snapshot);
+    main.appendChild(rule('Analysis'));
+    const storyWrap = h('section', 'edition-stories');
+    current.stories.forEach(s => storyWrap.appendChild(storyCard(s)));
+    main.appendChild(storyWrap);
+    main.appendChild(rule("Today's Playbook"));
+    const scenarioWrap = h('section', 'scenario-grid');
+    current.scenarios.forEach(s => scenarioWrap.appendChild(scenarioCard(s)));
+    main.appendChild(scenarioWrap);
+    main.appendChild(rule('Then vs Now'));
+    const tvn = h('section', 'then-now');
+    const left = h('div', 'then-now__column');
