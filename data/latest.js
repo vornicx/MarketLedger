@@ -1,4 +1,4 @@
-export const edition = {
+export const editions = [{
     date: '2026-09-21',
     displayDate: 'Monday, 21 September 2026',
     label: 'Morning Edition · 13:20 CEST snapshot',
@@ -106,8 +106,9 @@ export const edition = {
         { label: 'WSJ · Bitcoin', note: 'Bitcoin eight-month high near $85,117 and ETF/risk-sentiment context. Published 21 Sep 2026.', href: 'https://www.wsj.com/finance/currencies/bitcoin-jumps-above-85-000-to-8-month-high-050f3578' },
         { label: 'Cinco Días · Spain', note: 'IBEX near 19,700 and Brent near $101 snapshot. Published 21 Sep 2026.', href: 'https://cincodias.elpais.com/mercados-financieros/2026-09-21/la-bolsa-y-el-ibex-35.html' }
     ]
-};
-export const editions = [edition];
+
+}];
+export const edition = editions[0];
 // The hourly Solana wallet watcher is active separately. Only events that clear the
 // evidence threshold are promoted into a daily Market Ledger edition.
 export const whaleEvents = [];
