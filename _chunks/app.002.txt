@@ -1,0 +1,97 @@
+    append(left, h('div', 'kicker', 'WHAT WE KNEW THEN'), h('h3', '', 'Edition frozen as published'), h('p', '', 'This snapshot will remain immutable once the live pipeline is connected, preserving the exact assumptions, data and scenarios available on the publication date.'));
+    const right = h('div', 'then-now__column');
+    append(right, h('div', 'kicker', 'WHAT HAPPENED NEXT'), h('h3', '', 'Retrospective pending'), h('p', '', 'The review layer will record realised moves, thesis outcomes and lessons without rewriting the original edition.'));
+    append(tvn, left, right);
+    main.appendChild(tvn);
+    main.appendChild(rule('Sources & Notes'));
+    const sources = h('section', 'sources');
+    current.sources.forEach((s, i) => {
+        const row = h('div', 'sources__row');
+        let label;
+        if (s.href) {
+            const anchor = link(s.label, s.href, 'sources__label sources__link');
+            anchor.target = '_blank';
+            anchor.rel = 'noreferrer';
+            label = anchor;
+        }
+        else {
+            label = h('div', 'sources__label', s.label);
+        }
+        append(row, h('div', 'sources__index', String(i + 1).padStart(2, '0')), label, h('div', 'sources__note', s.note));
+        sources.appendChild(row);
+    });
+    main.appendChild(sources);
+    const pager = h('nav', 'edition-pager');
+    append(pager, link('← Archive', '/archive', 'text-link'), h('span', 'edition-pager__current', current.displayDate), h('span', 'edition-pager__disabled', 'Next edition →'));
+    main.appendChild(pager);
+    append(frag, main, footer());
+    return frag;
+}
+function archivePage() {
+    setPageMeta('Market Ledger — Archive', 'Browse permanent daily market editions and research notes.');
+    const frag = document.createDocumentFragment();
+    append(frag, masthead('Archive'));
+    const main = h('main', 'shell page');
+    append(main, h('div', 'kicker', 'ARCHIVE'), h('h1', 'page-title', 'Every edition, preserved.'), h('p', 'page-dek', 'The archive is the memory layer: what the system saw, what it believed mattered, and what scenarios were defined on each date.'));
+    const searchWrap = h('div', 'archive-search');
+    const label = h('label', 'archive-search__label', 'Search editions');
+    label.htmlFor = 'archive-q';
+    const input = h('input', 'archive-search__input');
+    input.id = 'archive-q';
+    input.type = 'search';
+    input.placeholder = 'Search date, headline or theme…';
+    input.autocomplete = 'off';
+    append(searchWrap, label, input);
+    main.appendChild(searchWrap);
+    main.appendChild(rule('September 2026'));
+    const list = h('section', 'archive-list');
+    const render = () => {
+        while (list.firstChild)
+            list.removeChild(list.firstChild);
+        const q = input.value.trim().toLowerCase();
+        const filtered = editions.filter(e => !q || `${e.displayDate} ${e.headline} ${e.dek}`.toLowerCase().includes(q));
+        if (!filtered.length) {
+            list.appendChild(h('p', 'empty-state', 'No editions match that search.'));
+            return;
+        }
+        filtered.forEach(e => {
+            const a = link('', `/edition/${e.date}`, 'archive-item');
+            append(a, h('time', 'archive-item__date', '21 SEP'), h('div', 'archive-item__body'));
+            const body = a.querySelector('.archive-item__body');
+            append(body, h('h2', 'archive-item__title', e.headline), h('p', 'archive-item__dek', e.dek), h('div', 'archive-item__meta', `${e.label} · ${e.displayDate}`));
+            list.appendChild(a);
+        });
+    };
+    input.addEventListener('input', render);
+    render();
+    main.appendChild(list);
+    append(frag, main, footer());
+    return frag;
+}
+function ideasPage() {
+    setPageMeta('Market Ledger — Ideas', 'Long-form investment research journal and thesis tracker.');
+    const frag = document.createDocumentFragment();
+    append(frag, masthead('Ideas'));
+    const main = h('main', 'shell page');
+    append(main, h('div', 'kicker', 'RESEARCH JOURNAL'), h('h1', 'page-title', 'Ideas before positions.'), h('p', 'page-dek', 'Each research note documents the thesis, bull/base/bear cases, catalysts, risks and the evidence that would force a change of mind.'));
+    main.appendChild(rule('Open research'));
+    const grid = h('section', 'ideas-list');
+    ideas.forEach(item => {
+        const a = link('', `/ideas/${item.slug}`, 'research-row');
+        append(a, h('div', 'research-row__asset', item.asset), h('div', 'research-row__content'), h('div', 'research-row__status', item.status));
+        const content = a.querySelector('.research-row__content');
+        append(content, h('h2', 'research-row__title', item.title), h('p', 'research-row__summary', item.summary), h('div', 'research-row__meta', `Last reviewed ${item.lastReviewed}`));
+        grid.appendChild(a);
+    });
+    main.appendChild(grid);
+    append(frag, main, footer());
+    return frag;
+}
+function ideaPage(item) {
+    setPageMeta(`Market Ledger — ${item.asset}: ${item.title}`, item.summary);
+    const frag = document.createDocumentFragment();
+    append(frag, masthead('Ideas'));
+    const main = h('main', 'shell research-page');
+    const head = h('header', 'research-head');
+    append(head, h('div', 'kicker', `${item.asset} · ${item.status.toUpperCase()}`), h('h1', 'research-head__title', item.title), h('p', 'research-head__dek', item.summary), h('div', 'research-head__meta', `Last reviewed ${item.lastReviewed}`));
+    main.appendChild(head);
