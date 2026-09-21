@@ -795,3 +795,220 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{ou
   .feed-story__media{width:96px}
   .feed-story__title{font-size:19px}
 }
+
+
+/* =========================================================
+   NEWSROOM PATTERNS — Reuters / CoinDesk / Defiant inspired
+   ========================================================= */
+
+/* Compact top tape: instant context before reading */
+.market-tape{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
+  align-items:stretch;
+  margin-bottom:10px;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.market-tape__label{
+  display:flex;
+  align-items:center;
+  padding:10px 16px 10px 0;
+  color:var(--muted);
+  font-size:7px;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.market-tape__track{
+  display:flex;
+  min-width:0;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.market-tape__track::-webkit-scrollbar{display:none}
+.market-tape__item{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  flex:0 0 auto;
+  min-width:142px;
+  padding:10px 14px;
+  border-left:1px solid var(--line);
+  white-space:nowrap;
+}
+.market-tape__symbol{
+  font:600 10px var(--serif);
+}
+.market-tape__price{
+  color:var(--ink-2);
+  font-size:8px;
+  font-weight:700;
+}
+.market-tape__change{
+  color:var(--muted);
+  font-size:7px;
+  font-weight:800;
+}
+.market-tape__item--positive .market-tape__change{color:var(--green)}
+.market-tape__item--negative .market-tape__change{color:var(--red)}
+
+/* Latest strip: fast newsroom scan without another card grid */
+.latest-strip{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
+  align-items:stretch;
+  margin-top:0;
+  border-bottom:1px solid var(--line);
+}
+.latest-strip__label{
+  display:flex;
+  align-items:center;
+  padding:13px 18px 13px 0;
+  color:var(--oxblood);
+  font-size:7px;
+  font-weight:850;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.latest-strip__track{
+  display:flex;
+  min-width:0;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.latest-strip__track::-webkit-scrollbar{display:none}
+.latest-strip__item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex:0 0 auto;
+  width:min(300px,70vw);
+  padding:11px 18px;
+  border-left:1px solid var(--line);
+}
+.latest-strip__category{
+  flex:0 0 auto;
+  color:var(--brass);
+  font-size:6px;
+  font-weight:850;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+.latest-strip__title{
+  overflow:hidden;
+  font:600 11px/1.2 var(--serif);
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+/* Morning Brew lesson: explicitly label the meaning */
+.feed-story__why-label{
+  margin-top:10px;
+  color:var(--muted);
+  font-size:6px;
+  font-weight:850;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+}
+.feed-story__dek{margin-top:4px}
+
+/* Kobeissi lesson, without marketing claims: visible audit trail */
+.rail-score__stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.rail-score__stat{
+  display:flex;
+  flex-direction:column;
+  padding:12px 9px 11px 0;
+}
+.rail-score__stat+.rail-score__stat{
+  padding-left:9px;
+  border-left:1px solid var(--line);
+}
+.rail-score__stat strong{
+  font:600 22px/1 var(--serif);
+}
+.rail-score__stat span{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:6px;
+  font-weight:800;
+  line-height:1.25;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+.rail-score__copy{
+  margin:10px 0 0;
+  color:var(--muted);
+  font:500 10px/1.42 var(--serif);
+}
+
+/* Four X-like cards become a scan row rather than a dominant dashboard */
+.social-home .market-cards{
+  grid-template-columns:repeat(4,1fr);
+}
+.social-home .market-card{
+  min-height:174px;
+}
+
+/* Improve feed typography after the newsroom additions */
+.feed-story__title{max-width:450px}
+.feed-story__dek{max-width:470px}
+
+/* Tablet */
+@media(max-width:1000px){
+  .social-home .market-cards{grid-template-columns:repeat(2,1fr)}
+  .social-home .market-card:nth-child(3){border-left:0;border-top:1px solid var(--line)}
+  .social-home .market-card:nth-child(4){border-top:1px solid var(--line)}
+}
+
+/* Mobile */
+@media(max-width:760px){
+  .market-tape{
+    width:calc(100% + 24px);
+    margin-left:-12px;
+    grid-template-columns:1fr;
+  }
+  .market-tape__label{
+    display:none;
+  }
+  .market-tape__item{
+    min-width:128px;
+    padding:9px 12px;
+  }
+  .market-tape__item:first-child{border-left:0}
+
+  .latest-strip{
+    width:calc(100% + 24px);
+    margin-left:-12px;
+    grid-template-columns:auto minmax(0,1fr);
+  }
+  .latest-strip__label{
+    padding-left:12px;
+  }
+  .latest-strip__item{
+    width:245px;
+    padding-inline:13px;
+  }
+
+  .social-home .market-cards{
+    display:flex;
+    overflow-x:auto;
+    border-right:0;
+    scrollbar-width:none;
+  }
+  .social-home .market-cards::-webkit-scrollbar{display:none}
+  .social-home .market-card{
+    min-width:176px;
+    flex:0 0 176px;
+    border-top:0!important;
+  }
+  .social-home .market-card:nth-child(n){border-left:1px solid var(--line)}
+  .social-home .market-card:first-child{border-left:0}
+
+  .rail-score__stat strong{font-size:20px}
+}
