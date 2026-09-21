@@ -141,10 +141,14 @@ function marketPulse(current = editionNow()) {
     const name=h('div','market-pulse__name');
     append(name,h('strong','',item.symbol),h('span','',item.label));
     append(top,icon,name);
-    const spark=h('div',`market-spark market-spark--${item.state||'neutral'} market-spark--${index}`);
-    append(cell,top,h('div','market-pulse__data'),spark);
+    append(cell,top,h('div','market-pulse__data'),h('div',`market-state-line market-state-line--${item.state||'neutral'}`));
     const data=cell.querySelector('.market-pulse__data');
-    append(data,h('strong','market-pulse__value',item.value),h('span','market-pulse__status',item.state==='positive'?'● '+(lang==='es'?'Favorable':'Positive'):item.state==='negative'?'● '+(lang==='es'?'Bajo presión':'Under pressure'):'● '+(lang==='es'?'Neutral':'Neutral')));
+    append(
+      data,
+      h('strong','market-pulse__value',item.value),
+      h('span','market-pulse__status',item.state==='positive'?'● '+(lang==='es'?'Favorable':'Positive'):item.state==='negative'?'● '+(lang==='es'?'Bajo presión':'Under pressure'):'● '+(lang==='es'?'Neutral':'Neutral')),
+      h('span','market-pulse__note',item.note)
+    );
     grid.appendChild(cell);
   });
   section.appendChild(grid);
@@ -253,7 +257,7 @@ function home() {
   const hero=h('section','premium-hero');
   const copy=h('div','premium-hero__copy');
   const meta=h('div','premium-hero__meta');
-  append(meta,h('span','',current.displayDate),h('span','premium-hero__live','● '+t.live));
+  append(meta,h('span','',current.displayDate),h('span','premium-hero__edition',t.lastUpdate));
   append(
     copy,
     h('div','premium-hero__label',t.leadLabel),
@@ -328,7 +332,7 @@ function home() {
     const sc=row.querySelector('.premium-scenario__copy');
     append(sc,h('div','premium-scenario__top'),h('p','premium-scenario__text',s.thesis));
     const top=sc.querySelector('.premium-scenario__top');
-    append(top,h('strong','',s.name),h('span','premium-scenario__tag',i===0?'40%':i===1?'45%':'15%'));
+    append(top,h('strong','',s.name));
     sGrid.appendChild(row);
   });
   scenarios.appendChild(sGrid);
