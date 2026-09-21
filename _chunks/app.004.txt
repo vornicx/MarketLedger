@@ -1,0 +1,70 @@
+    [['Noise', 'Transfers with weak directional meaning: custody, internal routing, collateral or ambiguous counterparties.'], ['Interesting', 'A move worth monitoring because size, timing or wallet history differs from baseline.'], ['High conviction', 'Repeated or clustered behaviour with contextual evidence pointing in the same direction. Still not an automatic trade signal.']].forEach(([a, b]) => { const x = h('article', 'method-card'); append(x, h('h3', '', a), h('p', '', b)); method.appendChild(x); });
+    main.appendChild(method);
+    append(frag, main, footer());
+    return frag;
+}
+function notFound(message = 'That page does not exist.') {
+    setPageMeta('Market Ledger — Not found', message);
+    const frag = document.createDocumentFragment();
+    append(frag, masthead());
+    const main = h('main', 'shell not-found');
+    append(main, h('div', 'kicker', '404'), h('h1', 'page-title', 'The ledger has no entry here.'), h('p', 'page-dek', message), link('Return to today →', '/', 'text-link text-link--large'));
+    append(frag, main, footer());
+    return frag;
+}
+function normalizePath(pathname) {
+    if (pathname.length > 1 && pathname.endsWith('/'))
+        return pathname.slice(0, -1);
+    return pathname;
+}
+function render() {
+    const path = normalizePath(window.location.pathname);
+    let page;
+    if (path === '/')
+        page = home();
+    else if (path === '/archive')
+        page = archivePage();
+    else if (path === '/ideas')
+        page = ideasPage();
+    else if (path === '/scorecard')
+        page = scorecardPage();
+    else if (path === '/whales')
+        page = whalesPage();
+    else if (path.startsWith('/edition/')) {
+        const date = path.slice('/edition/'.length);
+        page = /^\d{4}-\d{2}-\d{2}$/.test(date) ? editionPage(date) : notFound('Edition dates must use YYYY-MM-DD.');
+    }
+    else if (path.startsWith('/ideas/')) {
+        const slug = path.slice('/ideas/'.length);
+        const item = ideas.find(i => i.slug === slug);
+        page = item ? ideaPage(item) : notFound('That research note does not exist.');
+    }
+    else
+        page = notFound();
+    while (app.firstChild)
+        app.removeChild(app.firstChild);
+    app.appendChild(page);
+    window.scrollTo({ top: 0, behavior: 'instant' });
+}
+function isInternalLink(target) {
+    if (!(target instanceof Element))
+        return false;
+    const anchor = target.closest('a');
+    return anchor instanceof HTMLAnchorElement && anchor.origin === window.location.origin;
+}
+document.addEventListener('click', (e) => {
+    if (!isInternalLink(e.target))
+        return;
+    const a = e.target.closest('a');
+    if (a.target || a.hasAttribute('download') || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)
+        return;
+    const url = new URL(a.href);
+    if (url.pathname === window.location.pathname && url.hash) {
+        return;
+    }
+    e.preventDefault();
+    history.pushState({}, '', url.pathname + url.search + url.hash);
+    render();
+});
+window.addEventListener('popstate', render);
+render();
