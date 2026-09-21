@@ -1,0 +1,3 @@
+  .score-stat{padding:15px}.score-stat__value{font-size:34px}.score-row__thesis{font-size:20px}
+  .filter-select{width:100%;min-height:44px}.method-card h3{font-size:25px}
+}
