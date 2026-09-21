@@ -41,3 +41,26 @@ Mobile is designed as its own reading experience, not a compressed desktop page:
 ## Editorial voice
 
 Calm, analytical and falsifiable. Separate observed facts from interpretation. Do not manufacture certainty, urgency or trade signals. Prefer conditions, catalysts, risks and invalidation criteria.
+
+## Editorial lightness
+
+The interface should feel **edited**, not merely dense.
+
+- Prefer whitespace and hierarchy over repeated borders.
+- Use one strong headline at a time; secondary stories should step down clearly.
+- Reading columns should stay around 760–860px for long prose.
+- Market data should be scannable but visually quieter than editorial analysis.
+- Use thin rules and subtle paper contrast rather than heavy boxes.
+- Avoid presenting every section with equal visual weight.
+- Scenario, watchlist and archive modules should feel like supporting editorial furniture.
+- Mobile should preserve rhythm and whitespace rather than compress density.
+
+## Languages
+
+Market Ledger is bilingual: **English and Spanish**.
+
+- The language control must be visible in the masthead as `ES / EN`.
+- It changes navigation, interface labels and the complete editorial content.
+- Preference is persisted locally and can also be represented by the `?lang=es|en` query parameter.
+- New daily editions must be generated in both languages at publication time.
+- There is one canonical archive and one set of market facts; translations must never diverge on numbers, dates, sources, scenarios or thesis logic.
