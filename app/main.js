@@ -133,27 +133,31 @@ function ticker(current = editionNow()) {
 function storyCard(story, compact = false) {
   const t = strings();
   const article = h('article', compact ? 'story story--compact' : 'story');
+  article.id = story.id;
   append(article, h('div', 'story__kicker', story.category), h('h3', 'story__title', story.title), h('p', 'story__dek', story.dek));
   if (!compact) append(article, h('p', 'story__body', story.analysis), h('p', 'story__watch', `${t.watch}: ${story.watch}`));
   return article;
 }
 
-function scenarioCard(s, index) {
+function scenarioCard(s, index, compact = false) {
   const t = strings();
-  const card = h('article', `scenario scenario--${s.tone}`);
+  const card = h('article', `scenario scenario--${s.tone}${compact ? ' scenario--compact' : ''}`);
   const labels = [t.scenarioA,t.scenarioB,t.scenarioC];
   append(card, h('div', 'scenario__meta', labels[index] || `Scenario ${index+1}`), h('h3', 'scenario__title', s.name), h('p', 'scenario__thesis', s.thesis));
   const conditions = h('div', 'scenario__block');
   conditions.appendChild(h('div', 'scenario__label', t.confirm));
   const ul = h('ul', 'clean-list');
-  s.conditions.forEach(x => ul.appendChild(h('li','',x)));
+  (compact ? s.conditions.slice(0,2) : s.conditions).forEach(x => ul.appendChild(h('li','',x)));
   conditions.appendChild(ul);
-  const watch = h('div', 'scenario__block');
-  watch.appendChild(h('div', 'scenario__label', t.watchNext));
-  const ul2 = h('ul', 'clean-list');
-  s.watch.forEach(x => ul2.appendChild(h('li','',x)));
-  watch.appendChild(ul2);
-  append(card, conditions, watch);
+  append(card, conditions);
+  if (!compact) {
+    const watch = h('div', 'scenario__block');
+    watch.appendChild(h('div', 'scenario__label', t.watchNext));
+    const ul2 = h('ul', 'clean-list');
+    s.watch.forEach(x => ul2.appendChild(h('li','',x)));
+    watch.appendChild(ul2);
+    card.appendChild(watch);
+  }
   return card;
 }
 
@@ -175,72 +179,131 @@ function home() {
   append(frag, masthead('today'), ticker(current));
 
   const main = h('main','shell home-page');
+
+  // Cover story: one strong idea, not a dashboard wall.
   const lead = h('section','lead');
   const leadCopy = h('div','lead__copy');
-  append(leadCopy, h('div','kicker',t.dailyBrief), h('h1','lead__headline',current.headline), h('p','lead__dek',current.dek), h('div','lead__meta',`${current.label} · 12 min · ${current.displayDate}`));
+  append(
+    leadCopy,
+    h('div','kicker',t.dailyBrief),
+    h('h1','lead__headline',current.headline),
+    h('p','lead__dek',current.dek),
+    h('div','lead__meta',`${current.label} · 12 min · ${current.displayDate}`)
+  );
   const leadAside = h('aside','lead__aside');
-  append(leadAside, h('div','aside-rule',t.todayOneLine), h('p','lead__aside-quote',t.oneLine), link(t.fullEdition,withLang(`/edition/${current.date}`),'text-link'));
+  append(
+    leadAside,
+    h('div','aside-rule',t.todayOneLine),
+    h('p','lead__aside-quote',t.oneLine),
+    link(t.fullEdition,withLang(`/edition/${current.date}`),'text-link')
+  );
   append(lead,leadCopy,leadAside);
   main.appendChild(lead);
 
+  // Three-point briefing.
   main.appendChild(rule(t.editorialNote));
-  const note = h('section','brief-grid');
-  current.brief.forEach((p,i) => {
+  const note = h('section','brief-grid brief-grid--front');
+  current.brief.slice(0,3).forEach((p,i) => {
     const block = h('div','brief-paragraph');
     append(block,h('span','drop-index',String(i+1).padStart(2,'0')),h('p','',p));
     note.appendChild(block);
   });
   main.appendChild(note);
 
-  main.appendChild(rule(t.worldMacro));
-  const macro = h('section','story-grid story-grid--reading');
-  macro.id='macro';
-  current.stories.filter(s => ['oil-relief','fed-ceiling','equities-tech','europe-asia','china-fx'].includes(s.id)).forEach(s => macro.appendChild(storyCard(s)));
-  main.appendChild(macro);
+  // Front page: one featured analysis + two supporting stories.
+  main.appendChild(rule(t.topStories));
+  const front = h('section','front-stories');
+  const featured = current.stories.find(s=>s.id==='oil-relief') || current.stories[0];
+  const feature = h('article','front-feature');
+  feature.id = 'macro';
+  append(
+    feature,
+    h('div','story__kicker',featured.category),
+    h('h2','front-feature__title',featured.title),
+    h('p','front-feature__dek',featured.dek),
+    h('p','front-feature__body',featured.analysis),
+    h('p','story__watch',`${t.watch}: ${featured.watch}`),
+    link(t.readFullAnalysis,withLang(`/edition/${current.date}#${featured.id}`),'text-link')
+  );
 
-  main.appendChild(rule(t.marketsCrypto));
-  const markets = h('section','story-grid story-grid--reading');
-  markets.id='markets';
-  current.stories.filter(s => ['crypto-breakout','alt-beta','onchain-discipline'].includes(s.id)).forEach(s => markets.appendChild(storyCard(s)));
-  main.appendChild(markets);
+  const support = h('div','front-support');
+  ['crypto-breakout','fed-ceiling'].forEach(id=>{
+    const story=current.stories.find(s=>s.id===id);
+    if(!story) return;
+    const a=link('',withLang(`/edition/${current.date}#${story.id}`),'front-support__story');
+    append(a,h('div','story__kicker',story.category),h('h3','front-support__title',story.title),h('p','front-support__dek',story.dek),h('span','front-support__link',t.readStory));
+    support.appendChild(a);
+  });
+  append(front,feature,support);
+  main.appendChild(front);
 
+  // Remaining stories become a clean index instead of full-length copy.
+  main.appendChild(rule(t.moreToday));
+  const more = h('section','more-today');
+  current.stories
+    .filter(s=>![featured.id,'crypto-breakout','fed-ceiling'].includes(s.id))
+    .forEach(story=>{
+      const a=link('',withLang(`/edition/${current.date}#${story.id}`),'more-today__item');
+      append(
+        a,
+        h('div','more-today__category',story.category),
+        h('h3','more-today__title',story.title),
+        h('p','more-today__dek',story.dek),
+        h('span','more-today__arrow','→')
+      );
+      more.appendChild(a);
+    });
+  main.appendChild(more);
+
+  // Scenario map: compact on the cover, full inside the edition.
   main.appendChild(rule(t.playbook));
-  const scenarios = h('section','scenario-grid');
-  current.scenarios.forEach((s,i) => scenarios.appendChild(scenarioCard(s,i)));
+  const scenarios = h('section','scenario-grid scenario-grid--front');
+  current.scenarios.forEach((s,i)=>scenarios.appendChild(scenarioCard(s,i,true)));
   main.appendChild(scenarios);
 
-  main.appendChild(rule(t.whaleWatch));
-  const cryptoSection = h('section','split-panel'); cryptoSection.id='crypto';
-  const whaleCol = h('div','split-panel__main');
-  whaleCol.appendChild(h('p','section-intro',t.trackerIntro));
-  if (whalesNow().length) whalesNow().forEach(w => whaleCol.appendChild(whaleRow(w)));
-  else whaleCol.appendChild(h('div','whale-empty',t.noWhales));
-  const explainer = h('aside','editorial-aside');
-  append(explainer,h('div','aside-rule',t.classificationRule),h('h3','editorial-aside__title',t.contextConviction),h('p','',t.contextCopy),link(t.walletJournal,withLang('/whales'),'text-link'));
-  append(cryptoSection,whaleCol,explainer);
-  main.appendChild(cryptoSection);
-
+  // Watchlist comes before the wallet module: this is the actionable cover furniture.
   main.appendChild(rule(t.watchlist));
-  const watch = h('section','watchlist');
-  current.watchlist.forEach(item => {
-    const row = h('div','watchlist__row');
+  const watch = h('section','watchlist watchlist--front');
+  current.watchlist.slice(0,4).forEach(item=>{
+    const row=h('div','watchlist__row');
     append(row,h('div','watchlist__asset',item.asset),h('div','watchlist__reason',item.reason),h('div','watchlist__status',item.status));
     watch.appendChild(row);
   });
+  const watchFoot=h('div','module-foot');
+  append(watchFoot,link(t.fullEdition,withLang(`/edition/${current.date}`),'text-link'));
+  watch.appendChild(watchFoot);
   main.appendChild(watch);
 
+  // Whale Watch is deliberately quiet unless something actually matters.
+  main.appendChild(rule(t.whaleWatch));
+  const whaleBrief=h('section','whale-brief');
+  const localizedWhales=whalesNow();
+  const whaleCopy=h('div','whale-brief__copy');
+  append(
+    whaleCopy,
+    h('div','kicker',t.walletMonitor),
+    h('h3','whale-brief__title',localizedWhales.length ? t.whaleActivity : t.noWhaleSignal),
+    h('p','whale-brief__text',localizedWhales.length ? t.whaleActivityCopy : t.noWhaleSignalCopy)
+  );
+  const whaleAction=h('div','whale-brief__action');
+  append(whaleAction,link(t.walletJournal,withLang('/whales'),'text-link'));
+  append(whaleBrief,whaleCopy,whaleAction);
+  main.appendChild(whaleBrief);
+
+  // Research remains visible but secondary.
   main.appendChild(rule(t.researchIdeas));
-  const ideasGrid = h('section','ideas-grid');
-  ideasNow().forEach(item => {
-    const a = link('',withLang(`/ideas/${item.slug}`),'idea-card');
+  const ideasGrid=h('section','ideas-grid ideas-grid--front');
+  ideasNow().slice(0,2).forEach(item=>{
+    const a=link('',withLang(`/ideas/${item.slug}`),'idea-card');
     append(a,h('div','idea-card__asset',item.asset),h('h3','idea-card__title',item.title),h('p','idea-card__summary',item.summary),h('div','idea-card__meta',`${item.status} · ${t.lastReviewed} ${item.lastReviewed}`));
     ideasGrid.appendChild(a);
   });
   main.appendChild(ideasGrid);
 
-  const close = h('section','closing-note');
+  const close=h('section','closing-note closing-note--front');
   append(close,h('div','kicker',t.archiveWhy),h('h2','closing-note__title',t.archiveWhyTitle),h('p','',t.archiveWhyCopy),link(t.browseArchive,withLang('/archive'),'text-link text-link--large'));
   main.appendChild(close);
+
   append(frag,main,footer());
   return frag;
 }
