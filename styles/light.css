@@ -239,3 +239,559 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{ou
   .page,.edition-page,.research-page{padding-top:44px}.page-title,.edition-head__title,.research-head__title{font-size:48px}.page-dek,.edition-head__dek,.research-head__dek{font-size:18px}.jump-nav{margin-bottom:30px}.snapshot-grid{grid-template-columns:1fr 1fr}.story__title{font-size:31px}.scenario-grid{grid-template-columns:1fr}.scenario+.scenario{border-left:0;border-top:1px solid var(--line)}.then-now{grid-template-columns:1fr}.then-now__column+.then-now__column{border-left:0;border-top:1px solid var(--line)}.sources__row{grid-template-columns:28px 1fr}.sources__note{grid-column:2}.archive-item{grid-template-columns:1fr;gap:5px}.research-row{grid-template-columns:55px 1fr}.research-row__status{grid-column:2}.case-grid{grid-template-columns:1fr}.case-card+.case-card{border-left:0;border-top:1px solid var(--line)}.dual-list{grid-template-columns:1fr}.score-stats{grid-template-columns:1fr 1fr}.score-row{grid-template-columns:1fr}.method-grid{grid-template-columns:1fr}.footer__grid{grid-template-columns:1fr;gap:7px}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition-duration:.001ms!important}}
+
+
+/* =========================================================
+   EDITORIAL FEED — social readability + publication hierarchy
+   ========================================================= */
+
+.social-home{
+  padding:34px 0 64px;
+}
+
+/* Edition intro: readable before decorative */
+.edition-intro{
+  max-width:900px;
+  padding:36px 0 28px;
+}
+.edition-intro__eyebrow{
+  margin-bottom:10px;
+  color:var(--brass);
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+.edition-intro__meta{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:13px;
+  color:var(--muted);
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.edition-intro__dot{color:var(--brass)}
+.edition-intro__headline{
+  max-width:850px;
+  margin:0;
+  font:500 clamp(50px,6vw,78px)/.94 var(--serif);
+  letter-spacing:-.045em;
+}
+.edition-intro__dek{
+  max-width:760px;
+  margin:18px 0 0;
+  color:var(--ink-2);
+  font:500 20px/1.4 var(--serif);
+}
+.edition-intro__actions{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  margin-top:22px;
+}
+.primary-action{
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  padding:0 17px;
+  border-radius:2px;
+  background:var(--oxblood);
+  color:#fffaf1;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+.secondary-action{
+  color:var(--oxblood);
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+}
+
+/* Lead media works like a strong social preview */
+.lead-media{
+  position:relative;
+  width:100%;
+  aspect-ratio:2.12/1;
+  margin:0;
+  overflow:hidden;
+  background:#231f1a;
+  border-top:1px solid var(--line-strong);
+  border-bottom:1px solid var(--line-strong);
+}
+.lead-media__img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  filter:saturate(.78) contrast(.97) brightness(.9);
+}
+.lead-media:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(180deg,transparent 65%,rgba(15,13,10,.22));
+}
+.lead-media__credit,
+.feed-story__media__credit{
+  position:absolute;
+  right:8px;
+  bottom:7px;
+  z-index:3;
+  padding:3px 5px;
+  background:rgba(18,16,13,.62);
+  color:rgba(255,255,255,.84);
+  font-size:5px;
+  font-weight:700;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+
+/* Market cards remain a distinct scan layer */
+.social-home > .market-pulse{
+  margin-top:38px;
+}
+
+/* Feed + rail */
+.feed-layout{
+  display:grid;
+  grid-template-columns:minmax(0,730px) minmax(280px,340px);
+  gap:64px;
+  align-items:start;
+  max-width:1135px;
+  margin:58px auto 0;
+}
+.feed-main{min-width:0}
+.feed-rail{
+  position:sticky;
+  top:112px;
+  min-width:0;
+}
+
+/* Feed section vocabulary */
+.feed-block{
+  border-top:1px solid var(--line-strong);
+}
+.feed-block + .feed-block{
+  margin-top:50px;
+}
+.feed-heading{
+  min-height:58px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
+.feed-heading__title{
+  margin:0;
+  font:600 21px/1 var(--serif);
+  letter-spacing:.03em;
+}
+.feed-heading__meta,
+.feed-heading__link{
+  color:var(--muted);
+  font-size:8px;
+  font-weight:750;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+}
+.feed-heading__link{color:var(--oxblood)}
+
+/* Brief posts: closer to readable social posts than cards */
+.brief-post{
+  display:grid;
+  grid-template-columns:42px 1fr;
+  gap:14px;
+  padding:20px 0;
+  border-top:1px solid var(--line);
+}
+.brief-post:first-of-type{border-top:0}
+.brief-post__index{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  margin-top:1px;
+  border:1px solid var(--line-strong);
+  border-radius:50%;
+  color:var(--brass);
+  font:600 10px var(--serif);
+}
+.brief-post__title{
+  margin:0 0 6px;
+  font:600 17px/1.1 var(--serif);
+}
+.brief-post__text{
+  margin:0;
+  color:var(--ink-2);
+  font:500 15px/1.58 var(--serif);
+}
+
+/* Story feed */
+.feed-story{
+  display:grid;
+  grid-template-columns:205px minmax(0,1fr);
+  gap:22px;
+  padding:22px 0;
+  border-top:1px solid var(--line);
+  transition:opacity .15s ease;
+}
+.feed-story:first-of-type{border-top:0}
+.feed-story:hover{opacity:.82}
+.feed-story__media{
+  position:relative;
+  width:205px;
+  aspect-ratio:1.55/1;
+  margin:0;
+  overflow:hidden;
+  background:var(--paper-low);
+}
+.feed-story__media__img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  filter:saturate(.84) contrast(.98);
+}
+.feed-story__body{min-width:0}
+.feed-story__meta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  margin-bottom:7px;
+}
+.feed-story__category{
+  color:var(--brass);
+  font-size:7px;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.feed-story__rank{
+  color:var(--muted-2);
+  font:500 10px var(--serif);
+}
+.feed-story__title{
+  margin:0;
+  font:600 28px/.99 var(--serif);
+  letter-spacing:-.02em;
+}
+.feed-story__dek{
+  margin:8px 0 0;
+  color:var(--ink-2);
+  font:500 13.5px/1.48 var(--serif);
+}
+.feed-story__watch{
+  display:flex;
+  gap:5px;
+  margin-top:11px;
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.45;
+}
+.feed-story__watch strong{
+  color:var(--ink-2);
+  white-space:nowrap;
+}
+.feed-story__read{
+  display:inline-block;
+  margin-top:12px;
+  color:var(--oxblood);
+  font-size:7px;
+  font-weight:800;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+}
+
+/* Scenario rows are decision aids, not cards */
+.scenario-row{
+  display:grid;
+  grid-template-columns:42px 1fr;
+  gap:15px;
+  padding:20px 0;
+  border-top:1px solid var(--line);
+}
+.scenario-row:first-of-type{border-top:0}
+.scenario-row__marker{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#e9efe9;
+  color:var(--green);
+  font:600 17px var(--serif);
+}
+.scenario-row--neutral .scenario-row__marker{
+  background:#ebe9e5;
+  color:#5d5750;
+}
+.scenario-row--defensive .scenario-row__marker{
+  background:#f5e7e4;
+  color:var(--red);
+}
+.scenario-row__title{
+  margin:0;
+  font:600 19px/1.05 var(--serif);
+}
+.scenario-row__text{
+  margin:6px 0 0;
+  color:var(--ink-2);
+  font:500 13px/1.48 var(--serif);
+}
+.scenario-row__conditions{
+  margin:9px 0 0;
+  padding-left:16px;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.55;
+}
+
+/* Rail: compact and predictable */
+.rail-card{
+  padding:17px 0 4px;
+  border-top:1px solid var(--line-strong);
+}
+.rail-card + .rail-card{
+  margin-top:28px;
+}
+.rail-card__head{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:8px;
+}
+.rail-card__title{
+  margin:0;
+  font:600 17px/1 var(--serif);
+}
+.rail-card__meta,
+.rail-card__link{
+  color:var(--muted);
+  font-size:7px;
+  font-weight:800;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+}
+.rail-card__link{color:var(--oxblood)}
+
+.rail-watch{
+  padding:12px 0;
+  border-top:1px solid var(--line);
+}
+.rail-watch__top{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:12px;
+}
+.rail-watch__asset{
+  font:600 14px var(--serif);
+}
+.rail-watch__stance{
+  max-width:150px;
+  color:var(--green);
+  font-size:7px;
+  font-weight:800;
+  text-align:right;
+}
+.rail-watch__reason{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.42;
+}
+
+.rail-signal,
+.rail-research{
+  display:grid;
+  grid-template-columns:24px 1fr;
+  gap:10px;
+  padding:11px 0;
+  border-top:1px solid var(--line);
+}
+.rail-signal__dot{
+  width:7px;
+  height:7px;
+  margin:4px auto 0;
+  border-radius:50%;
+  background:var(--brass);
+}
+.rail-signal__copy,
+.rail-research__copy{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+}
+.rail-signal__copy strong,
+.rail-research__copy strong{
+  font:600 12px/1.2 var(--serif);
+}
+.rail-signal__copy span,
+.rail-research__copy span{
+  display:-webkit-box;
+  overflow:hidden;
+  margin-top:3px;
+  color:var(--muted);
+  font-size:8.5px;
+  line-height:1.38;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+}
+.rail-research__index{
+  width:22px;
+  height:22px;
+  display:grid;
+  place-items:center;
+  background:var(--paper-low);
+  color:var(--muted);
+  font:500 8px var(--serif);
+}
+.rail-empty{
+  display:grid;
+  grid-template-columns:28px 1fr;
+  gap:10px;
+  padding:12px 0;
+  border-top:1px solid var(--line);
+}
+.rail-empty__icon{
+  width:25px;
+  height:25px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:var(--paper-low);
+  font-family:var(--serif);
+}
+.rail-empty__copy{
+  display:flex;
+  flex-direction:column;
+}
+.rail-empty__copy strong{
+  font:600 12px var(--serif);
+}
+.rail-empty__copy span{
+  margin-top:3px;
+  color:var(--muted);
+  font-size:8.5px;
+  line-height:1.4;
+}
+
+/* Tablet */
+@media(max-width:1000px){
+  .feed-layout{
+    grid-template-columns:minmax(0,1fr) 280px;
+    gap:38px;
+  }
+  .feed-story{
+    grid-template-columns:175px minmax(0,1fr);
+    gap:18px;
+  }
+  .feed-story__media{width:175px}
+}
+
+/* Mobile = one continuous readable feed */
+@media(max-width:760px){
+  .social-home{padding-top:8px}
+  .edition-intro{padding:27px 0 22px}
+  .edition-intro__headline{font-size:46px;line-height:.94}
+  .edition-intro__dek{font-size:17px;line-height:1.4}
+  .edition-intro__actions{margin-top:18px}
+  .lead-media{
+    width:calc(100% + 24px);
+    margin-left:-12px;
+    aspect-ratio:1.55/1;
+  }
+
+  .social-home > .market-pulse{
+    margin-top:32px;
+  }
+
+  .feed-layout{
+    display:block;
+    margin-top:42px;
+  }
+  .feed-rail{
+    position:static;
+    margin-top:46px;
+  }
+  .feed-block + .feed-block{margin-top:42px}
+  .feed-heading{min-height:50px}
+  .feed-heading__title{font-size:19px}
+  .feed-heading__meta{font-size:7px}
+
+  .brief-post{
+    grid-template-columns:36px 1fr;
+    gap:11px;
+    padding:17px 0;
+  }
+  .brief-post__index{
+    width:30px;
+    height:30px;
+  }
+  .brief-post__title{font-size:16px}
+  .brief-post__text{font-size:14px}
+
+  .feed-story{
+    display:grid;
+    grid-template-columns:112px minmax(0,1fr);
+    gap:13px;
+    padding:16px 0;
+  }
+  .feed-story__media{
+    width:112px;
+    min-height:92px;
+    aspect-ratio:1.2/1;
+  }
+  .feed-story__meta{margin-bottom:5px}
+  .feed-story__title{
+    font-size:21px;
+    line-height:1;
+  }
+  .feed-story__dek{
+    display:-webkit-box;
+    overflow:hidden;
+    font-size:10.5px;
+    line-height:1.35;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+  }
+  .feed-story__watch{display:none}
+  .feed-story__read{margin-top:8px}
+
+  .scenario-row{padding:16px 0}
+  .scenario-row__title{font-size:18px}
+  .scenario-row__text{font-size:12px}
+  .scenario-row__conditions{font-size:9px}
+
+  .feed-rail{
+    border-top:1px solid var(--line-strong);
+    padding-top:2px;
+  }
+  .rail-card{
+    padding-top:18px;
+  }
+  .rail-card + .rail-card{margin-top:24px}
+}
+
+@media(max-width:420px){
+  .edition-intro__headline{font-size:41px}
+  .edition-intro__actions{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:12px;
+  }
+  .feed-story{
+    grid-template-columns:96px minmax(0,1fr);
+  }
+  .feed-story__media{width:96px}
+  .feed-story__title{font-size:19px}
+}
