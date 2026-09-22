@@ -1,4 +1,61 @@
 export const editions = [{
+    date: '2026-09-22',
+    displayDate: 'Tuesday, 22 September 2026',
+    label: 'Morning Edition · ~09:00 CEST snapshot',
+    headline: 'AI breadth extends the risk rally — but higher-for-longer rates are rebuilding the ceiling',
+    dek: 'The Nasdaq closed at a record, Asian technology followed and Bitcoin reached an eight-month high above $87,000 before easing. The regime is constructive, but a firm dollar, renewed Fed-hike pricing and rebuilding crypto leverage keep the macro ceiling in place.',
+    brief: [
+        'The key change is confirmation: Monday’s relief became a real US cash-session breakout. The S&P 500 gained 1.49%, the Nasdaq 2.26% to a record close and the PHLX semiconductor index 4.3%, with AMD reaching a $1 trillion market value.',
+        'Asia extended the technology bid on Tuesday while Bitcoin traded above $87,000 before easing. Brent stabilised around $100–101 after Monday’s sharp decline, preserving part of the inflation-relief channel.',
+        'The picture changes if rates or energy re-accelerate. Markets raised the implied probability of another Fed hike in October to about 56%, DXY held near 100.46 and USD/JPY near 157.4; a renewed oil shock or US 10Y back above 5% would challenge the rally.',
+        'Crypto breadth is strong but leverage is rebuilding: CoinGlass data cited by CoinDesk showed $647.9m of shorts among $746.6m of 24-hour liquidations while aggregate open interest rose 7.59% to $156bn.',
+        'Gold fell about 0.6% to $4,319.39/oz as higher-for-longer rates and a firm dollar outweighed safe-haven demand.'
+    ],
+    indicators: [
+        { symbol: 'STOXX', label: 'STOXX Europe 600', value: 'Mon +1.0%', note: 'Strongest session since July; Tuesday cash snapshot not yet reliable at publication', state: 'positive' },
+        { symbol: 'IBEX', label: 'IBEX 35', value: '19,724.4 · +1.08%', note: 'Monday close; lower oil supported European risk', state: 'positive' },
+        { symbol: 'BTC', label: 'Bitcoin', value: '>$87k high · then ~-2%', note: 'Eight-month high; leverage rebuilt quickly after short squeeze', state: 'positive' },
+        { symbol: 'ETH', label: 'Ether', value: 'high-$2,700s', note: 'Participated in broad crypto rally; snapshot, not a closing print', state: 'positive' },
+        { symbol: 'SOL', label: 'Solana', value: 'high-$110s', note: 'High-beta participation; no wallet-specific signal promoted', state: 'positive' },
+        { symbol: 'BRENT', label: 'Brent crude', value: '~$100.8', note: 'Stabilising after Monday drop below $100; US-Iran diplomacy in focus', state: 'neutral' },
+        { symbol: 'DXY', label: 'Dollar index', value: '~100.457', note: 'Firm on expectations of further Fed tightening', state: 'neutral' },
+        { symbol: 'USDJPY', label: 'USD/JPY', value: '~157.4', note: 'Yen weak despite BoJ hike; intervention risk remains live', state: 'negative' },
+        { symbol: 'US10Y', label: 'US 10-year Treasury', value: '~4.95%', note: 'Below 5% stress threshold after Monday rally in bonds', state: 'positive' },
+        { symbol: 'GOLD', label: 'Gold', value: '$4,319.39 · -0.6%', note: 'Higher-for-longer rates and firm dollar weighed', state: 'negative' }
+    ],
+    stories: [
+        { id: 'ai-breadth', category: 'United States', title: 'The relief rally now has cash-session confirmation', dek: 'The Nasdaq closed at a record and semiconductor breadth strengthened, turning Monday from a futures-led bounce into a confirmed risk move.', analysis: 'The S&P 500 rose 1.49%, Nasdaq 2.26%, Dow 0.71% and Russell 2000 0.5%. The PHLX semiconductor index gained 4.3%, AMD crossed $1 trillion in market value and Intel and Arm rose more than 12%. The positive read is breadth inside technology; the constraint is that duration leadership remains sensitive to the 10-year yield around the 5% line.', watch: 'Whether Nasdaq breadth persists while US 10Y stays below 5% and whether the S&P 500 can challenge its August record.' },
+        { id: 'rates-ceiling', category: 'Rates', title: 'The Fed is rebuilding the ceiling as risk assets rally', dek: 'Lower long yields help growth, but October hike pricing has risen to about 56% and the dollar remains firm.', analysis: 'The Fed’s new 3.75%–4.00% range is still restrictive and Reuters reported another October hike being priced at roughly 56%, up from 43.5%. The 10-year yield near 4.95% provides relief, but the front end and dollar continue to signal a higher-for-longer path. Fed speakers and the 2-year auction are the immediate test.', watch: 'Fed rhetoric, the US 2-year auction, US 10Y around 5% and DXY around 100.5.' },
+        { id: 'oil-diplomacy', category: 'Macro', title: 'Oil remains the macro switch, but the decline has paused', dek: 'Brent stabilised near $100.8 after falling below $100, so the inflation-relief channel remains open but is no longer improving in a straight line.', analysis: 'The dominant chain remains Middle East diplomacy to oil to inflation expectations to yields to duration assets. Potential US-Iran discussions at the UN General Assembly can keep supply risk contained, but any fresh disruption would reverse that chain quickly.', watch: 'Brent around $100–102, credible US-Iran diplomacy and any renewed Gulf supply disruption.' },
+        { id: 'asia-followthrough', category: 'Asia', title: 'Asia is extending the technology bid', dek: 'MSCI Asia-Pacific rose about 0.75%, Taiwan reached records and South Korea gained strongly while Japan remained closed.', analysis: 'The follow-through improves the quality of Monday’s US signal because the move is crossing regions. The next fork is Trump-Xi on 24 September, where trade and AI policy can affect semiconductors, yuan and regional risk appetite together.', watch: 'Trump-Xi headlines, Taiwan/Korea semiconductor breadth and Chinese FX policy.' },
+        { id: 'yen-stress', category: 'FX', title: 'The yen is weak even after the BoJ hike', dek: 'USD/JPY around 157.4 shows that global rate differentials still dominate despite the BoJ lifting its policy rate to 1.25%.', analysis: 'Two dovish dissents and a slower expected BoJ path left the yen vulnerable while other central banks remain hawkish. Japanese rate checks make the approach to 160 asymmetric because intervention risk rises as the move becomes disorderly.', watch: '157–160 USD/JPY, Japanese rate-check/intervention signals and relative Fed-BoJ repricing.' },
+        { id: 'crypto-leverage', category: 'Crypto', title: 'Bitcoin broke out, but leverage is rebuilding faster than comfort', dek: 'BTC reached an eight-month high above $87,000, yet open interest rose 7.59% to $156bn through a major short squeeze.', analysis: 'CoinDesk, citing CoinGlass, reported $647.9m of short liquidations within $746.6m total over 24 hours. Rising open interest despite forced closures means positions were rapidly replaced. That can extend momentum, but it also makes the breakout more fragile unless spot demand and ETF flows continue to absorb leverage.', watch: 'BTC holding $82k–$84k, spot-versus-perpetual volume, funding, open interest and fresh ETF flow data.' },
+        { id: 'gold-rates', category: 'Commodities', title: 'Gold is losing the argument to real rates for now', dek: 'Gold fell 0.6% to about $4,319 as a firm dollar and higher-for-longer rate expectations outweighed geopolitical safe-haven demand.', analysis: 'The move is a useful cross-check: if geopolitical risk remains high but gold weakens, the rates and dollar channel is dominating. A renewed fall in yields or DXY would be needed to improve the near-term setup.', watch: '$4,300 support, DXY and US real/nominal yields.' }
+    ],
+    scenarios: [
+        { id: 'risk-on', name: 'AI breadth becomes a broader risk-on move', tone: 'constructive', thesis: 'Oil stays contained, US 10Y remains below 5%, Fed rhetoric does not increase terminal-rate expectations and technology breadth persists while BTC holds its breakout.', conditions: ['Brent stays around/below $100–102', 'US 10Y remains below 5%', 'Nasdaq breadth persists', 'BTC holds $82k–$84k as leverage cools'], watch: ['Brent', 'US 10Y', 'Nasdaq/SOX breadth', 'BTC spot demand and open interest'] },
+        { id: 'base', name: 'Strong gains move into digestion', tone: 'neutral', thesis: 'Oil stabilises around $100, the dollar stays firm and markets consolidate Monday’s gains while waiting for Trump-Xi and fresh macro confirmation.', conditions: ['Brent remains near $100', 'DXY stays firm without surging', 'Yields remain near current levels', 'Crypto funding stays manageable'], watch: ['Trump-Xi', 'DXY', 'US 2Y/10Y', 'Crypto funding'] },
+        { id: 'risk-off', name: 'Rates or geopolitics reverse the relief', tone: 'defensive', thesis: 'A fresh oil shock or hawkish repricing pushes yields and the dollar higher, narrowing equity breadth and exposing rebuilt crypto leverage.', conditions: ['Brent jumps above $105', 'US 10Y sustains above 5%', 'DXY accelerates', 'BTC loses $82k with elevated open interest'], watch: ['Middle East supply', 'Fed speakers', 'USD/JPY intervention risk', 'Crypto liquidations'] }
+    ],
+    watchlist: [
+        { asset: 'BTC', reason: 'Hold the $82k–$84k breakout area after leverage rebuilds', status: 'Constructive, do not chase' },
+        { asset: 'Nasdaq', reason: 'Retain the record while US 10Y remains below 5%', status: 'Confirmation needed' },
+        { asset: 'Brent', reason: 'Stay around/below $102 to preserve the inflation-relief channel', status: 'Macro trigger' },
+        { asset: 'US 10Y', reason: '5% remains the key valuation line for duration assets', status: 'Risk control' },
+        { asset: 'USD/JPY', reason: '157–160 zone with rising Japanese intervention asymmetry', status: 'Event risk' },
+        { asset: 'Gold', reason: 'Watch whether $4,300 holds while DXY stays firm', status: 'Study' }
+    ],
+    sources: [
+        { label: 'Reuters · Global markets', note: 'Asia, oil, Fed-hike pricing and cross-asset regime. Published 22 Sep 2026.', href: 'https://www.reuters.com/world/china/global-markets-wrapup-1-2026-09-22/' },
+        { label: 'Reuters · Wall Street', note: 'US closes, Nasdaq record, semiconductor breadth and Treasury/oil transmission. Published 21 Sep 2026.', href: 'https://www.reuters.com/business/wall-st-futures-rise-ai-stocks-gain-oil-prices-slide-2026-09-21/' },
+        { label: 'Reuters · FX', note: 'USD/JPY, BoJ context and intervention risk. Published 22 Sep 2026.', href: 'https://www.reuters.com/world/asia-pacific/yen-squeezed-hawkish-turn-grips-central-banks-2026-09-22/' },
+        { label: 'Reuters · Gold', note: 'Gold, silver and higher-for-longer rate pressure. Published 22 Sep 2026.', href: 'https://www.reuters.com/world/india/gold-muted-higher-for-longer-rate-outlook-weighs-2026-09-22/' },
+        { label: 'Reuters · Europe', note: 'STOXX 600 Monday close and sector leadership. Published 21 Sep 2026.', href: 'https://www.reuters.com/markets/europe/europes-stoxx-600-gains-tech-rallies-oil-retreat-eases-nerves-2026-09-21/' },
+        { label: 'CoinDesk · Crypto derivatives', note: 'BTC breakout, $647.9m short liquidations and open interest up 7.59% to $156bn. Published 21 Sep 2026.', href: 'https://www.coindesk.com/markets/2026/09/21/bitcoin-hits-usd85-000-as-short-squeeze-forces-out-usd648-million-of-bearish-bets' },
+        { label: 'WSJ · Bitcoin flows', note: 'BTC above $86k, Strategy purchase and Friday ETF-flow context. Published 21 Sep 2026.', href: 'https://www.wsj.com/livecoverage/stock-market-today-dow-sp-500-nasdaq-09-21-2026/card/bitcoin-climbs-above-85-000-after-etf-inflows-strategy-purchases-qgos9wls2EyYjd7Wbcs4' },
+        { label: 'Cinco Días · Spain', note: 'IBEX 35 Monday close, Brent below $100 and US 10Y below 5%. Published 21 Sep 2026.', href: 'https://cincodias.elpais.com/mercados-financieros/2026-09-21/la-bolsa-y-el-ibex-35.html' }
+    ]
+}, {
     date: '2026-09-21',
     displayDate: 'Monday, 21 September 2026',
     label: 'Morning Edition · 13:20 CEST snapshot',
@@ -20,74 +77,19 @@ export const editions = [{
         { symbol: 'USDJPY', label: 'USD/JPY', value: '~157', note: 'Intervention risk after BoJ hike', state: 'neutral' }
     ],
     stories: [
-        {
-            id: 'oil-relief', category: 'Macro', title: 'Oil is the transmission mechanism that matters most this morning',
-            dek: 'Lower crude is doing more than helping consumers: it is relaxing the inflation-and-rates chain that has been punishing long-duration assets.',
-            analysis: 'Brent is down for a fourth consecutive session, with Reuters reporting that more oil is leaving the Gulf than markets had feared. That matters because the latest tightening cycle has been reinforced by inflation risk. When energy falls, the market can price a slightly less hostile inflation path, Treasury prices improve, yields ease and technology and crypto receive immediate relief. The key distinction is cause: a fall in oil because supply normalises is generally friendlier for risk assets than a fall caused by collapsing demand.',
-            watch: 'Whether Brent can stay near or below the low-$100s area without a fresh geopolitical supply shock.'
-        },
-        {
-            id: 'fed-ceiling', category: 'Rates', title: 'The Fed remains the ceiling on enthusiasm',
-            dek: 'Last week’s 25 bp hike to 3.75%–4.00% was the first increase in three years and the message remained hawkish.',
-            analysis: 'The relief rally is occurring after a material tightening step, not after a pivot. Sixteen of eighteen Fed policymakers projected at least one more increase during 2026. That leaves rate-sensitive assets vulnerable if inflation data, wages or energy re-accelerate. Lower oil buys the market breathing room, but the bar for durable multiple expansion remains high while real yields and the dollar are elevated.',
-            watch: 'US 2-year and 10-year yields, real yields, October hike expectations and any change in Fed language after incoming inflation data.'
-        },
-        {
-            id: 'equities-tech', category: 'Markets', title: 'Technology is leading the rebound across regions',
-            dek: 'Europe’s tech sector gained around 2%, while US futures pointed higher and AI-linked names led pre-market strength.',
-            analysis: 'This is the cross-asset confirmation we wanted to see from an energy-relief move. The STOXX 600 rose about 0.8%, European technology led, travel benefited from lower fuel prices and energy stocks lagged. In the US, Reuters reported S&P 500 futures up around 0.6% and Nasdaq futures close to 1%, with Intel, Marvell, Meta and Dell among notable pre-market gainers. The breadth is better than a single-name squeeze, but the rally still needs cash-session follow-through.',
-            watch: 'Whether US cash trading confirms futures, whether market breadth improves beyond AI/semis, and whether yields stay cooperative.'
-        },
-        {
-            id: 'europe-asia', category: 'Markets', title: 'Europe and Asia are confirming a broader risk bid',
-            dek: 'The move is not isolated to Wall Street: Korea, Taiwan, China and Europe are participating.',
-            analysis: 'South Korea’s tech-heavy index rose roughly 1.4%–1.5%, Taiwan gained around 1% and Chinese blue chips were positive while Japan was closed for Silver Week. Europe then extended the pattern, led by technology and banks. This geographic breadth improves the quality of today’s signal, although holiday-thinned Japanese trading and the upcoming Trump–Xi summit mean positioning can still shift quickly.',
-            watch: 'Trump–Xi headlines, semiconductor trade policy and whether the yuan’s strength persists after the summit.'
-        },
-        {
-            id: 'china-fx', category: 'Macro', title: 'The yuan is quietly sending a stability signal ahead of Trump–Xi',
-            dek: 'The yuan reached a fresh multi-year high as the PBOC eased resistance to appreciation before this week’s summit.',
-            analysis: 'Reuters reported the onshore yuan around 6.695 per dollar, its strongest in more than three and a half years. The PBOC set its midpoint at the strongest level since February 2023. That looks less like a new structural appreciation regime and more like an effort to enter the summit with stable financial conditions. Still, a calmer currency backdrop reduces one source of global risk and supports Asian assets at the margin.',
-            watch: 'Whether the fixing remains supportive after the summit and whether US–China discussions produce concrete trade or AI outcomes.'
-        },
-        {
-            id: 'crypto-breakout', category: 'Crypto', title: 'Bitcoin is breaking higher — but part of the move is a short squeeze',
-            dek: 'BTC moved from above $82,000 to an eight-month high around $85,100 as oil fell, ETF demand improved and short positions were forced out.',
-            analysis: 'The move is strong enough to respect, but its composition matters. CoinDesk showed BTC above $82,000 alongside broad crypto gains; later reporting put Bitcoin above $85,000. Separate liquidation data cited by market coverage showed hundreds of millions of dollars of short liquidations, which means some acceleration came from forced buying rather than fresh discretionary spot demand. Ether and Solana also advanced, confirming breadth. The next test is whether price can hold after the squeeze impulse fades.',
-            watch: 'Spot ETF flows, spot-versus-perpetual volume, funding, open interest rebuilding and whether BTC can hold above the prior $80k resistance zone.'
-        },
-        {
-            id: 'alt-beta', category: 'Crypto', title: 'SOL is participating, but BTC remains the cleaner macro barometer',
-            dek: 'Solana is up with the market, yet the current catalyst is macro liquidity rather than a Solana-specific fundamental break.',
-            analysis: 'SOL traded around $111.83 in a CoinDesk snapshot, up roughly 2.9%, while broader reports showed larger intraday gains as the crypto rally accelerated. For now, the move should be interpreted as high-beta participation in improving risk appetite. A higher-conviction SOL thesis would need confirmation from network activity, stablecoin growth and the tracked-wallet cluster rather than price alone.',
-            watch: 'SOL/BTC relative strength, DEX activity quality, stablecoin flows and coordinated accumulation among tracked wallets.'
-        },
-        {
-            id: 'onchain-discipline', category: 'On-chain', title: 'No wallet move enters the ledger without context',
-            dek: 'The hourly wallet monitor is active separately; the daily edition only promotes events that survive a higher evidence threshold.',
-            analysis: 'A raw transfer is not a trade. Market Ledger will only publish a whale event when we can classify the destination, size it relative to the wallet, compare it with historical behaviour and, ideally, see confirmation across unrelated wallets or market liquidity. That prevents the journal from turning into a stream of noisy transaction alerts.',
-            watch: 'Clusters of same-token accumulation, fresh DEX buys by historically profitable wallets and exchange inflow/outflow patterns that repeat.'
-        }
+        { id: 'oil-relief', category: 'Macro', title: 'Oil is the transmission mechanism that matters most this morning', dek: 'Lower crude is doing more than helping consumers: it is relaxing the inflation-and-rates chain that has been punishing long-duration assets.', analysis: 'Brent is down for a fourth consecutive session, with Reuters reporting that more oil is leaving the Gulf than markets had feared. That matters because the latest tightening cycle has been reinforced by inflation risk. When energy falls, the market can price a slightly less hostile inflation path, Treasury prices improve, yields ease and technology and crypto receive immediate relief. The key distinction is cause: a fall in oil because supply normalises is generally friendlier for risk assets than a fall caused by collapsing demand.', watch: 'Whether Brent can stay near or below the low-$100s area without a fresh geopolitical supply shock.' },
+        { id: 'fed-ceiling', category: 'Rates', title: 'The Fed remains the ceiling on enthusiasm', dek: 'Last week’s 25 bp hike to 3.75%–4.00% was the first increase in three years and the message remained hawkish.', analysis: 'The relief rally is occurring after a material tightening step, not after a pivot. Sixteen of eighteen Fed policymakers projected at least one more increase during 2026. That leaves rate-sensitive assets vulnerable if inflation data, wages or energy re-accelerate. Lower oil buys the market breathing room, but the bar for durable multiple expansion remains high while real yields and the dollar are elevated.', watch: 'US 2-year and 10-year yields, real yields, October hike expectations and any change in Fed language after incoming inflation data.' },
+        { id: 'equities-tech', category: 'Markets', title: 'Technology is leading the rebound across regions', dek: 'Europe’s tech sector gained around 2%, while US futures pointed higher and AI-linked names led pre-market strength.', analysis: 'This is the cross-asset confirmation we wanted to see from an energy-relief move. The STOXX 600 rose about 0.8%, European technology led, travel benefited from lower fuel prices and energy stocks lagged. In the US, Reuters reported S&P 500 futures up around 0.6% and Nasdaq futures close to 1%, with Intel, Marvell, Meta and Dell among notable pre-market gainers. The breadth is better than a single-name squeeze, but the rally still needs cash-session follow-through.', watch: 'Whether US cash trading confirms futures, whether market breadth improves beyond AI/semis, and whether yields stay cooperative.' },
+        { id: 'europe-asia', category: 'Markets', title: 'Europe and Asia are confirming a broader risk bid', dek: 'The move is not isolated to Wall Street: Korea, Taiwan, China and Europe are participating.', analysis: 'South Korea’s tech-heavy index rose roughly 1.4%–1.5%, Taiwan gained around 1% and Chinese blue chips were positive while Japan was closed for Silver Week. Europe then extended the pattern, led by technology and banks. This geographic breadth improves the quality of today’s signal, although holiday-thinned Japanese trading and the upcoming Trump–Xi summit mean positioning can still shift quickly.', watch: 'Trump–Xi headlines, semiconductor trade policy and whether the yuan’s strength persists after the summit.' },
+        { id: 'china-fx', category: 'Macro', title: 'The yuan is quietly sending a stability signal ahead of Trump–Xi', dek: 'The yuan reached a fresh multi-year high as the PBOC eased resistance to appreciation before this week’s summit.', analysis: 'Reuters reported the onshore yuan around 6.695 per dollar, its strongest in more than three and a half years. The PBOC set its midpoint at the strongest level since February 2023. That looks less like a new structural appreciation regime and more like an effort to enter the summit with stable financial conditions. Still, a calmer currency backdrop reduces one source of global risk and supports Asian assets at the margin.', watch: 'Whether the fixing remains supportive after the summit and whether US–China discussions produce concrete trade or AI outcomes.' },
+        { id: 'crypto-breakout', category: 'Crypto', title: 'Bitcoin is breaking higher — but part of the move is a short squeeze', dek: 'BTC moved from above $82,000 to an eight-month high around $85,100 as oil fell, ETF demand improved and short positions were forced out.', analysis: 'The move is strong enough to respect, but its composition matters. CoinDesk showed BTC above $82,000 alongside broad crypto gains; later reporting put Bitcoin above $85,000. Separate liquidation data cited by market coverage showed hundreds of millions of dollars of short liquidations, which means some acceleration came from forced buying rather than fresh discretionary spot demand. Ether and Solana also advanced, confirming breadth. The next test is whether price can hold after the squeeze impulse fades.', watch: 'Spot ETF flows, spot-versus-perpetual volume, funding, open interest rebuilding and whether BTC can hold above the prior $80k resistance zone.' },
+        { id: 'alt-beta', category: 'Crypto', title: 'SOL is participating, but BTC remains the cleaner macro barometer', dek: 'Solana is up with the market, yet the current catalyst is macro liquidity rather than a Solana-specific fundamental break.', analysis: 'SOL traded around $111.83 in a CoinDesk snapshot, up roughly 2.9%, while broader reports showed larger intraday gains as the crypto rally accelerated. For now, the move should be interpreted as high-beta participation in improving risk appetite. A higher-conviction SOL thesis would need confirmation from network activity, stablecoin growth and the tracked-wallet cluster rather than price alone.', watch: 'SOL/BTC relative strength, DEX activity quality, stablecoin flows and coordinated accumulation among tracked wallets.' },
+        { id: 'onchain-discipline', category: 'On-chain', title: 'No wallet move enters the ledger without context', dek: 'The hourly wallet monitor is active separately; the daily edition only promotes events that survive a higher evidence threshold.', analysis: 'A raw transfer is not a trade. Market Ledger will only publish a whale event when we can classify the destination, size it relative to the wallet, compare it with historical behaviour and, ideally, see confirmation across unrelated wallets or market liquidity. That prevents the journal from turning into a stream of noisy transaction alerts.', watch: 'Clusters of same-token accumulation, fresh DEX buys by historically profitable wallets and exchange inflow/outflow patterns that repeat.' }
     ],
     scenarios: [
-        {
-            id: 'risk-on', name: 'Relief becomes a broader risk-on move', tone: 'constructive',
-            thesis: 'Lower oil continues to ease inflation pressure, yields remain contained and today’s tech/crypto strength broadens rather than fading after the opening impulse.',
-            conditions: ['Brent holds near/below the low-$100s', 'US yields do not re-accelerate', 'Nasdaq cash breadth confirms futures', 'BTC holds above the prior $80k breakout area'],
-            watch: ['Brent', 'US 10Y / real yields', 'Nasdaq breadth', 'BTC spot demand and ETF flows']
-        },
-        {
-            id: 'base', name: 'Relief rally, then digestion', tone: 'neutral',
-            thesis: 'Markets keep today’s gains but remain range-bound as investors balance lower oil against a still-hawkish Fed and upcoming Trump–Xi event risk.',
-            conditions: ['Oil stabilises rather than collapses', 'Dollar remains firm but not surging', 'Equity leadership rotates', 'Crypto funding stays controlled'],
-            watch: ['DXY', '2Y yield', 'Trump–Xi headlines', 'Crypto funding/open interest']
-        },
-        {
-            id: 'risk-off', name: 'Macro pressure returns', tone: 'defensive',
-            thesis: 'A renewed oil shock, hotter inflation signal or hawkish repricing pushes yields and the dollar higher, reversing the relief trade in high-beta assets.',
-            conditions: ['Brent rebounds sharply', 'US yields break higher', 'Dollar strengthens', 'BTC loses the $80k area with leverage still elevated'],
-            watch: ['Middle East supply headlines', 'Fed repricing', 'Credit spreads', 'Crypto liquidations']
-        }
+        { id: 'risk-on', name: 'Relief becomes a broader risk-on move', tone: 'constructive', thesis: 'Lower oil continues to ease inflation pressure, yields remain contained and today’s tech/crypto strength broadens rather than fading after the opening impulse.', conditions: ['Brent holds near/below the low-$100s', 'US yields do not re-accelerate', 'Nasdaq cash breadth confirms futures', 'BTC holds above the prior $80k breakout area'], watch: ['Brent', 'US 10Y / real yields', 'Nasdaq breadth', 'BTC spot demand and ETF flows'] },
+        { id: 'base', name: 'Relief rally, then digestion', tone: 'neutral', thesis: 'Markets keep today’s gains but remain range-bound as investors balance lower oil against a still-hawkish Fed and upcoming Trump–Xi event risk.', conditions: ['Oil stabilises rather than collapses', 'Dollar remains firm but not surging', 'Equity leadership rotates', 'Crypto funding stays controlled'], watch: ['DXY', '2Y yield', 'Trump–Xi headlines', 'Crypto funding/open interest'] },
+        { id: 'risk-off', name: 'Macro pressure returns', tone: 'defensive', thesis: 'A renewed oil shock, hotter inflation signal or hawkish repricing pushes yields and the dollar higher, reversing the relief trade in high-beta assets.', conditions: ['Brent rebounds sharply', 'US yields break higher', 'Dollar strengthens', 'BTC loses the $80k area with leverage still elevated'], watch: ['Middle East supply headlines', 'Fed repricing', 'Credit spreads', 'Crypto liquidations'] }
     ],
     watchlist: [
         { asset: 'BTC', reason: 'Hold above the former $80k resistance zone after the short-squeeze impulse', status: 'Constructive, wait for hold' },
@@ -106,7 +108,6 @@ export const editions = [{
         { label: 'WSJ · Bitcoin', note: 'Bitcoin eight-month high near $85,117 and ETF/risk-sentiment context. Published 21 Sep 2026.', href: 'https://www.wsj.com/finance/currencies/bitcoin-jumps-above-85-000-to-8-month-high-050f3578' },
         { label: 'Cinco Días · Spain', note: 'IBEX near 19,700 and Brent near $101 snapshot. Published 21 Sep 2026.', href: 'https://cincodias.elpais.com/mercados-financieros/2026-09-21/la-bolsa-y-el-ibex-35.html' }
     ]
-
 }];
 export const edition = editions[0];
 // The hourly Solana wallet watcher is active separately. Only events that clear the
@@ -137,6 +138,9 @@ export const ideas = [
     }
 ];
 export const thesisReviews = [
+    { id: '2026-09-22-ai-breadth', date: '2026-09-22', category: 'Equities', thesis: 'Nasdaq and semiconductor strength can persist for five trading days if the US 10-year yield remains below 5%.', horizon: '5 trading days', outcome: 'Open', evidence: 'Initial evidence: Nasdaq record close, SOX +4.3%, US 10Y near 4.95%. Invalidation: sustained US 10Y above 5% plus narrowing equity breadth.' },
+    { id: '2026-09-22-btc-hold', date: '2026-09-22', category: 'Crypto', thesis: 'BTC can hold the $82k breakout area over seven days if spot demand absorbs the post-squeeze leverage rebuild.', horizon: '7 days', outcome: 'Open', evidence: 'Initial evidence: BTC above $87k intraday, but open interest +7.59% to $156bn. Invalidation: decisive loss of $82k while open interest/funding remain elevated.' },
+    { id: '2026-09-22-oil-relief', date: '2026-09-22', category: 'Macro', thesis: 'Brent near or below $102 for five days keeps the inflation-relief channel supportive for duration assets.', horizon: '5 days', outcome: 'Open', evidence: 'Initial evidence: Brent around $100.8 after Monday fell below $100. Invalidation: sustained move above $105 driven by a renewed supply shock.' },
     { id: 't1', date: '2026-09-21', category: 'Crypto', thesis: 'BTC can hold the former $80k resistance zone after today’s short-squeeze acceleration.', horizon: '7 days', outcome: 'Open', evidence: 'Initial edition thesis. Review after the squeeze impulse and ETF-flow follow-through can be observed.' },
     { id: 't2', date: '2026-09-21', category: 'Macro', thesis: 'If Brent remains near the low-$100s and yields stay contained, technology and crypto should retain part of today’s relief bid.', horizon: '5 days', outcome: 'Open', evidence: 'Initial cross-asset thesis based on the oil → inflation → yields → duration transmission chain.' }
 ];
